@@ -521,7 +521,7 @@ def display_hourly_credits_chart(conn, environments, start_date):
             combined_hourly_credits = pd.concat([combined_hourly_credits, df_hourly_credits], ignore_index=True)
     if not combined_hourly_credits.empty:
         # Create a single graph for all environments combined
-        fig_hourly = px.area(combined_hourly_credits, x='Hour', y='Credits', title='Credits Used Per Hour')
+        fig_hourly = px.scatter_3d(combined_hourly_credits, x='Hour', y='Credits', title='Credits Used Per Hour')
         st.plotly_chart(fig_hourly)
     else:
         st.warning("No hourly data available for the selected environment(s).")
@@ -705,6 +705,7 @@ def monitor3():
             ])
 
             # Create a bar chart to display top 5 warehouse performance by query type
+             df_performance_by_query_type = df_performance_by_query_type.sort_values(by='Average Execution Time (seconds)', ascending=False)
             fig_performance_by_query_type = px.bar(df_performance_by_query_type, x='Warehouse Name', y='Average Execution Time (seconds)', color='Query Type',
                                                 title='Top 5 Warehouse Performance by Query Type')
             st.plotly_chart(fig_performance_by_query_type)
