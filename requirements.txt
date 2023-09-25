@@ -1,5 +1,6 @@
 snowflake
 snowflake-connector-python
+snowflake-connector-python==3.8
 snowflake-snowpark-python
 pandas
 streamlit
