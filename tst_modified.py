@@ -13,7 +13,7 @@ from utils import sql as sql
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('snowgov/image.png')
+#image = Image.open('snowgov/image.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
