@@ -19,13 +19,21 @@ st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=F
 
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
-    "account": "pr65711.ap-southeast-1",
-    "user": "snowgovernance",
-    "password": "Sravani@23",
+
+    "account": "ie30988.ap-southeast-1",
+
+    "user": "snowgov",
+
+    "password": "G@nesh2$3",
+
     "role": "accountadmin",
+
     "warehouse": "COMPUTE_WH",
+
     "database": "UTIL_DB",
+
     "schema": "ADMIN_TOOLS"
+
 }
 if "grant_users" not in st.session_state:
     st.session_state.grant_users = []
