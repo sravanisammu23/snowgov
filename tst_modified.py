@@ -657,7 +657,10 @@ def monitor3():
             st.plotly_chart(fig_top_10_users)
     # Call the function to display the top 10 users as a bar graph
     display_top_10_users(conn)
-    # Define a function to fetch and display top 5 warehouse performance by query type
+
+    
+
+      # Define a function to fetch and display top 5 warehouse performance by query type
     def display_top_5_warehouse_performance_by_query_type(conn, selected_environments):
         # Construct the SQL query based on the selected environments
         if 'All' in selected_environments:
@@ -691,24 +694,28 @@ def monitor3():
                     warehouse_name, avg_execution_time_seconds DESC
                 LIMIT 5;
             """
+
         performance_by_query_type_data = execute_query(conn, query_performance_by_query_type)
+
         if not performance_by_query_type_data:
             st.warning("No data available for top 5 warehouse performance by query type.")
         else:
             df_performance_by_query_type = pd.DataFrame(performance_by_query_type_data, columns=[
                 'Warehouse Name', 'Query Type', 'Average Execution Time (seconds)'
             ])
-        df_performance_by_query_type = df_performance_by_query_type.sort_values(by='Average Execution Time (seconds)', ascending=False)
-        fig_performance_by_query_type = px.bar(df_performance_by_query_type,
-                                        x='Warehouse Name',
-                                        y='Average Execution Time (seconds)',
-                                        color='Query Type',
-                                        title='Top 5 Warehouse Performance by Query Type',
-                                        category_orders={"Warehouse Name": df_performance_by_query_type['Warehouse Name'].tolist()})
+
             # Create a bar chart to display top 5 warehouse performance by query type
-        st.plotly_chart(fig_performance_by_query_type)
+            fig_performance_by_query_type = px.bar(df_performance_by_query_type, x='Warehouse Name', y='Average Execution Time (seconds)', color='Query Type',
+                                                title='Top 5 Warehouse Performance by Query Type')
+            st.plotly_chart(fig_performance_by_query_type)
+
+
     # ... (your existing code)
+
     display_top_5_warehouse_performance_by_query_type(conn, selected_environments)
+
+ 
+    
     # Define a function to fetch and display top 5 credits used by Cloud Services and Compute by Warehouse
     def display_top_5_credits_by_warehouse(conn, selected_environments):
         if 'All' in selected_environments:
