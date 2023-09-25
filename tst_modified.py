@@ -13,7 +13,7 @@ from utils import sql as sql
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('C:\\Users\\sravani.sammu\\Downloads\\image.png')
+image = Image.open('snowgov\image.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
@@ -1015,7 +1015,7 @@ def about():
     # Create an expander for the about section
     with st.expander("About", expanded=True):
         # Load and display the image with adjusted width
-        image_path = 'C:\\Users\\sravani.sammu\\Downloads\\image.png'
+        image_path = 'snowgov/image.png'
         image = Image.open(image_path)
         st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
         # Write the about content with styling
