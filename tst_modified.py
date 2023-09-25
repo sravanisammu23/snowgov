@@ -521,7 +521,7 @@ def display_hourly_credits_chart(conn, environments, start_date):
             combined_hourly_credits = pd.concat([combined_hourly_credits, df_hourly_credits], ignore_index=True)
     if not combined_hourly_credits.empty:
         # Create a single graph for all environments combined
-        fig_hourly = px.scatter_3d(combined_hourly_credits, x='Hour', y='Credits', title='Credits Used Per Hour')
+        fig_hourly = px.scatter(combined_hourly_credits, x='Hour', y='Credits', title='Credits Used Per Hour')
         st.plotly_chart(fig_hourly)
     else:
         st.warning("No hourly data available for the selected environment(s).")
