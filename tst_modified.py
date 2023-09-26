@@ -558,7 +558,7 @@ def monitor3():
         st.warning("Please select at least one option for the Environment filter.")
         return
     if selected_environments:
-        projects = ['All'] + [result[0].strip() if result[0] is not None else '' for result in execute_query(conn, construct_project_query(selected_environments))]
+        projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
         selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
     # Subject Area Filter
         subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
