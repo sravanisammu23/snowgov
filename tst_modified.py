@@ -425,7 +425,7 @@ def construct_subject_query(environments, projects):
         """
     elif projects:
         return f"""
-            SELECT DISTINCT tag_value
+            SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
             WHERE domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA'
             AND object_name IN (
@@ -701,6 +701,7 @@ def monitor3():
         if not performance_by_query_type_data:
             st.warning("No data available for top 5 warehouse performance by query type.")
         else:
+            df_performance_by_query_type = df_performance_by_query_type.sort_values(by='Average Execution Time (seconds)', ascending=False)
             df_performance_by_query_type = pd.DataFrame(performance_by_query_type_data, columns=[
                 'Warehouse Name', 'Query Type', 'Average Execution Time (seconds)'
             ])
