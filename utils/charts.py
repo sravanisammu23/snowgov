@@ -15,7 +15,7 @@ ALTAIR_AXIS_CONFIG = dict(
 ALTAIR_SCHEME = "blues"
 
 
-@st.cache_data(ttl=60 * 60 * 12)
+@st.experimental_memo(ttl=60 * 60 * 12)
 def get_bar_chart(
     df: pd.DataFrame,
     date_column: str,
@@ -41,7 +41,7 @@ def get_bar_chart(
     return chart
 
 
-@st.cache_data(ttl=60 * 60 * 12)
+@st.experimental_memo(ttl=60 * 60 * 12)
 def get_histogram_chart(
     df: pd.DataFrame,
     date_column: str,
@@ -74,7 +74,7 @@ def get_histogram_chart(
     return chart
 
 
-@st.cache_data(ttl=60 * 60 * 12)
+@st.experimental_memo(ttl=60 * 60 * 12)
 def get_scatter_chart(
     df: pd.DataFrame,
 ):
@@ -85,24 +85,12 @@ def get_scatter_chart(
         )
         .encode(
             x=alt.X(
-                "NUMBER_OF_QUERIES_LOG:Q",
-                title="Number of queries (log scale)",
-                scale=alt.Scale(
-                    domain=[
-                        df.NUMBER_OF_QUERIES_LOG.min() - 0.5,
-                        df.NUMBER_OF_QUERIES_LOG.max() + 0.5,
-                    ]
-                ),
+                "NUMBER_OF_QUERIES:Q",  # Updated to original column
+                title="Number of queries",
             ),
             y=alt.Y(
-                "EXECUTION_MINUTES_LOG:Q",
-                title="Execution minutes (log scale)",
-                scale=alt.Scale(
-                    domain=[
-                        df.EXECUTION_MINUTES_LOG.min() - 0.5,
-                        df.EXECUTION_MINUTES_LOG.max() + 0.5,
-                    ]
-                ),
+                "EXECUTION_MINUTES:Q",  # Updated to original column
+                title="Execution minutes",
             ),
             tooltip=[
                 "QUERY_TEXT",
