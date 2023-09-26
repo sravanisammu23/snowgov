@@ -1026,7 +1026,7 @@ def about():
     # Create an expander for the about section
     with st.expander("About", expanded=True):
         # Load and display the image with adjusted width
-        image_path = 'C:\\Users\\sravani.sammu\\Downloads\\image.png'
+        image_path = 'image.png'
         image = Image.open(image_path)
         st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
         # Write the about content with styling
