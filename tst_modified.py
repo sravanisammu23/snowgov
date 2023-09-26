@@ -107,7 +107,7 @@ def database_management():
         menu_icon="database-fill-gear",
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
@@ -166,7 +166,7 @@ def user_creation_page():
         menu_icon ='person-fill-add',
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
@@ -186,7 +186,7 @@ def role_manage():
         menu_icon = 'person-fill-gear',
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
@@ -364,7 +364,7 @@ def monitor():
         orientation="horizontal",
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
@@ -1050,7 +1050,7 @@ def Menu_navigator():
             menu_icon="snow2",
     styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
              }
         )
