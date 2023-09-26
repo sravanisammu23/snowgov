@@ -419,7 +419,7 @@ def construct_subject_query(environments, projects):
         """
     elif environments:
         return f"""
-            SELECT DISTINCT tag_value
+            SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
             WHERE LEFT(object_name, 4) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
         """
@@ -472,7 +472,7 @@ def construct_query(environments, projects, subject_areas, start_date, end_date)
         if environments:
             where_clauses.append(f"LEFT(warehouse_name, 4) IN ({environments_str})")
         if projects:
-            where_clauses.append(f"warehouse_name IN (SELECT DISTINCT tr.object_name FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'COST_CENTER' AND tr.tag_value IN ({projects_str}))")
+            where_clauses.append(f"warehouse_name IN (SELECT DISTINCT trim(tr.object_name) FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'COST_CENTER' AND tr.tag_value IN ({projects_str}))")
         if subject_areas:
             where_clauses.append(f"warehouse_name IN (SELECT DISTINCT trim(tr.object_name) FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'SUBJECT_AREA' AND tr.tag_value IN ({subject_areas_str}))")
         where_clause = ' AND '.join(where_clauses) if where_clauses else "1=1"  # default to true if there are no where clauses
