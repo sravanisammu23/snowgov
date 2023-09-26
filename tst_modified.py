@@ -660,7 +660,7 @@ def monitor3():
 
 
 
-      # Define a function to fetch and display top 5 warehouse performance by query type
+      # Define a function to fetch and display top 5 warehouses performance by query type
     def display_top_5_warehouse_performance_by_query_type(conn, selected_environments):
         # Construct the SQL query based on the selected environments
         if 'All' in selected_environments:
