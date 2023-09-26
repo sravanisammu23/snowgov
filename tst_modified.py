@@ -101,7 +101,7 @@ def create_schema(conn, environment, team_name, sub_team_name, schema_name, powe
 def database_management():
     choose = option_menu(
         menu_title="PROJECT SPACE",
-        options=["Database", "Schema"],
+        options=["Database", "Schema"], 
         icons=["database-fill-add", "database-fill-lock"],
         orientation="horizontal",
         menu_icon="database-fill-gear",
