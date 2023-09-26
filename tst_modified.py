@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import snowflake.connector
-import snowflake.connector.errors  # <-- Corrected import
+import snowflake.connector.errors 
 from streamlit_option_menu import option_menu
 import matplotlib.pyplot as plt
 import numpy as np
