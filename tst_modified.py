@@ -698,7 +698,7 @@ def monitor3():
         performance_by_query_type_data = execute_query(conn, query_performance_by_query_type)
 
         if not performance_by_query_type_data:
-            st.warning("No data available for top 5 warehouse performance by query type.")
+            st.warning("No data available for top 5 warehouses performance by query type.")
         else:
             df_performance_by_query_type = pd.DataFrame(performance_by_query_type_data, columns=[
                 'Warehouse Name', 'Query Type', 'Average Execution Time (seconds)'
