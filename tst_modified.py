@@ -14,7 +14,6 @@ from PIL import Image
 import base64
 import plotly.express as px
 image = Image.open('image.png')
-st.set_page_config(page_title="SNOWGOV", page_icon=":bar_chart:",layout="wide")
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
@@ -472,7 +471,7 @@ def construct_query(environments, projects, subject_areas, start_date, end_date)
         if environments:
             where_clauses.append(f"LEFT(warehouse_name, 4) IN ({environments_str})")
         if projects:
-            where_clauses.append(f"warehouse_name IN (SELECT DISTINCT trim(tr.object_name) FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'COST_CENTER' AND tr.tag_value IN ({projects_str}))")
+            where_clauses.append(f"warehouse_name IN (SELECT DISTINCT tr.object_name FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'COST_CENTER' AND tr.tag_value IN ({projects_str}))")
         if subject_areas:
             where_clauses.append(f"warehouse_name IN (SELECT DISTINCT trim(tr.object_name) FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'SUBJECT_AREA' AND tr.tag_value IN ({subject_areas_str}))")
         where_clause = ' AND '.join(where_clauses) if where_clauses else "1=1"  # default to true if there are no where clauses
@@ -701,7 +700,6 @@ def monitor3():
         if not performance_by_query_type_data:
             st.warning("No data available for top 5 warehouse performance by query type.")
         else:
-            df_performance_by_query_type = df_performance_by_query_type.sort_values(by='Average Execution Time (seconds)', ascending=False)
             df_performance_by_query_type = pd.DataFrame(performance_by_query_type_data, columns=[
                 'Warehouse Name', 'Query Type', 'Average Execution Time (seconds)'
             ])
