@@ -17,6 +17,15 @@ image = Image.open('image.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
+SNOWFLAKE_CONFIG = {
+    "account": "ie30988.ap-southeast-1",
+    "user": "snowgov",
+    "password": "G@nesh2$3",
+    "role": "accountadmin",
+    "warehouse": "COMPUTE_WH",
+    "database": "UTIL_DB",
+    "schema": "ADMIN_TOOLS"
+}
 if "grant_users" not in st.session_state:
     st.session_state.grant_users = []
 def apply_css_styles():
