@@ -17,7 +17,6 @@ image = Image.open('image.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
-st.write("iam fine")
 if "grant_users" not in st.session_state:
     st.session_state.grant_users = []
 def apply_css_styles():
