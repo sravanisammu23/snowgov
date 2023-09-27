@@ -72,8 +72,7 @@ def date_selector() -> Tuple[datetime.date, datetime.date]:
         "Last 3 months",
         "Last 6 months",
         "Last 12 months",
-        "All time",
-        "Custom",
+        "All time"
     ]
 
     if "date_range" in st.session_state:
@@ -89,8 +88,7 @@ def date_selector() -> Tuple[datetime.date, datetime.date]:
             "Last 3 months",
             "Last 6 months",
             "Last 12 months",
-            "All time",
-            "Custom",
+            "All time"
         ],
         index=index,
         key="date_range",
@@ -111,21 +109,7 @@ def date_selector() -> Tuple[datetime.date, datetime.date]:
         else:
             date_from = datetime.date(year=2016, month=1, day=1)
 
-    if "custom" in st.session_state:
-        value = st.session_state.custom
-    else:
-        value = (
-            date_to - datetime.timedelta(days=7),
-            date_to,
-        )
-
-    if date_range == "Custom":
-        date_from, date_to = st.date_input(
-            "Choose start and end date",
-            value=value,
-            key="custom",
-        )
-
+    
     st.caption(f"Your selection is from **{date_from}** to **{date_to}**")
 
     return date_from, date_to
