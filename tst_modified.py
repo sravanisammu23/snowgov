@@ -1023,12 +1023,13 @@ def monitor2():
         use_container_width=True,
     )
 def about():
+    image_path = 'image.png'
+    image = Image.open(image_path)
+    st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
     # Create an expander for the about section
     with st.expander("About", expanded=True):
         # Load and display the image with adjusted width
-        image_path = 'image.png'
-        image = Image.open(image_path)
-        st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+  
         # Write the about content with styling
         st.markdown("""
                 <p>This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
