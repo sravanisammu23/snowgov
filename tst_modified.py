@@ -1023,24 +1023,112 @@ def monitor2():
         use_container_width=True,
     )
 def about():
-    image_path = 'image.png'
-    image = Image.open(image_path)
-    st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+
     # Create an expander for the about section
-    with st.expander("About", expanded=True):
+
+    des1=option_menu(
+
+        menu_title =None,
+
+        options=["SNOWGOV"],
+
+        icons = ["snow2"],
+
+        styles={
+
+        "container": {"padding": "0!important", "background-color": "#fafafa"},
+
+        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+
+        "nav-link-selected": {"background-color": "#0096FF"},
+
+             }
+
+    )
+
+    if des1 == "SNOWGOV":
+
+        with st.expander('**Description**', expanded=False):
+
         # Load and display the image with adjusted width
-  
+
+       
+
         # Write the about content with styling
-        st.markdown("""
-                <p>This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
-                <ul>
-                    <li>User interface through which the IT team can configure Organization and Account Parameters</li>
-                    <li>User Interface through which IT teams can create Projects (a logical entity). For each Project, they can create multiple Environments (Dev, Stage, Production). Internally for each environment, the app creates Databases or schemas depending on configuration. For each project and environment, provide a GUI to create warehouses</li>
-                    <li>Onboard users to projects and assign respective roles on each environment (i.e. Database or Schemas)</li>
-                    <li>Provide Cost-monitoring dashboards drilled down by Accounts, Projects, Environments, Users, etc.</li>
+
+            st.markdown("""
+
+            <div style="font-size:14px;">
+
+                <p style="font-size:14px;">This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
+
+                <ul style="font-size:14px;">
+
+                    <li style="font-size:14px;">User interface through which the IT team can configure Organization and Account Parameters</li>
+
+                    <li style="font-size:14px;">User Interface through which IT teams can create Projects (a logical entity). For each Project, they can create multiple Environments (Dev, Stage, Production). Internally for each environment, the app creates Databases or schemas depending on configuration. For each project and environment, provide a GUI to create warehouses</li>
+
+                    <li style="font-size:14px;">Onboard users to projects and assign respective roles on each environment (i.e. Database or Schemas)</li>
+
+                    <li style="font-size:14px;">Provide Cost-monitoring dashboards drilled down by Accounts, Projects, Environments, Users, etc.</li>
+
                 </ul>
+
             </div>
+
             """, unsafe_allow_html=True)
+
+   
+
+    faq=option_menu(
+
+        menu_title =None,
+
+        options=["FAQ's"],
+
+        icons =["bookmarks-fill"],
+
+        styles={
+
+        "container": {"padding": "0!important", "background-color": "#fafafa"},
+
+        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+
+        "nav-link-selected": {"background-color": "#0096FF"},
+
+             }
+
+    )
+
+    if faq == "FAQ's":
+
+        with st.expander("**What is SnowGov, and why do I need it?**",expanded=False):
+
+            st.markdown("""
+
+                        <p style="font-size:14px;">SnowGov is a powerful Snowflake Native App designed to simplify the management and governance of your Snowflake environment. You need SnowGov to efficiently configure accounts, create projects and environments, manage users, and monitor costs in your Snowflake setup.</p>""", unsafe_allow_html=True)
+
+        with st.expander("**How can I configure my organization and account parameters with SnowGov?**",expanded=False):
+
+            st.markdown("""
+
+                        <p style="font-size:14px;">SnowGov provides an intuitive user interface for your IT team to easily configure organization and account parameters, ensuring you have full control over your Snowflake resources.</p>""", unsafe_allow_html=True)
+
+        with st.expander("**Can I create logical entities like projects and environments with SnowGov?**",expanded=False):
+
+            st.markdown('''<p style="font-size:14px;">Yes, SnowGov allows you to create projects and multiple environments within them, such as Development, Staging, and Production. It also dynamically generates databases or schemas based on your configurations.</p>''', unsafe_allow_html=True)
+
+        with st.expander('**How do I manage warehouses for my projects and environments using SnowGov?**',expanded=False):
+
+            st.markdown('''<p style="font-size:14px;">SnowGov offers a user-friendly GUI to create and manage warehouses for each project and environment, simplifying Snowflake resource allocation.</p>''', unsafe_allow_html=True)
+
+        with st.expander("**How can I onboard users to projects and assign roles within each environment?**",expanded=False):
+
+            st.markdown('''<p style="font-size:14px;">SnowGov streamlines user onboarding and role assignment, ensuring that users have the right access permissions within databases or schemas.</p>''', unsafe_allow_html=True)
+
+        with st.expander('**Can I monitor Snowflake costs with SnowGov?**',expanded=False):
+
+            st.markdown('''<p style="font-size:14px;">Yes, SnowGov provides cost-monitoring dashboards that allow you to track costs by accounts, projects, environments, and users, helping you optimize your Snowflake spending.</p>''', unsafe_allow_html=True)
 def Menu_navigator():
     with st.sidebar:
         choice = option_menu(
