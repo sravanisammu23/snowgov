@@ -558,11 +558,11 @@ def monitor3():
         st.warning("Please select at least one option for the Environment filter.")
         return
     if selected_environments:
-        Business unit = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
-        selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
+        projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
+        selected_projects = st.sidebar.multiselect('BUSINESS UNIT :', projects, default=['All'])
     # Subject Area Filter
-        Project = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
-        selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
+        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
+        selected_subject_areas = st.sidebar.multiselect('PROJECT :', subject_areas, default=['All'])
         # Constructing Query based on Graph Option
         query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
         warehouse_credits = execute_query(conn, query_credits)
