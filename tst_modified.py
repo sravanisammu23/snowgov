@@ -712,14 +712,7 @@ def monitor3():
             st.plotly_chart(fig_performance_by_query_type)
 
 
-    # ... (your existing code)
-
-    display_top_5_warehouse_performance_by_query_type(conn, selected_environments)
-
-
-
-
-
+   
     # Define a function to fetch and display top 5 credits used by Cloud Services and Compute by Warehouse
     def display_top_5_credits_by_warehouse(conn, selected_environments):
         if 'All' in selected_environments:
@@ -727,14 +720,13 @@ def monitor3():
                 SELECT
                     warehouse_name,
                     SUM(credits_used_cloud_services) AS credits_used_cloud_services,
-                    SUM(credits_used_compute) AS credits_used_compute,
-                    SUM(credits_used) AS credits_used
+                    SUM(credits_used_compute) AS credits_used_compute
                 FROM
                     snowflake.account_usage.warehouse_metering_history
                 GROUP BY
                     1
                 ORDER BY
-                    credits_used DESC
+                    credits_used_cloud_services DESC  -- Order by credits used by Cloud Services (or 'credits_used_compute' for Compute)
                 LIMIT
                     5;  -- Limit to top 5
             """
@@ -744,8 +736,7 @@ def monitor3():
                 SELECT
                     warehouse_name,
                     SUM(credits_used_cloud_services) AS credits_used_cloud_services,
-                    SUM(credits_used_compute) AS credits_used_compute,
-                    SUM(credits_used) AS credits_used
+                    SUM(credits_used_compute) AS credits_used_compute
                 FROM
                     snowflake.account_usage.warehouse_metering_history
                 WHERE
@@ -753,42 +744,32 @@ def monitor3():
                 GROUP BY
                     1
                 ORDER BY
-                    credits_used DESC
+                    credits_used_cloud_services DESC  -- Order by credits used by Cloud Services (or 'credits_used_compute' for Compute)
                 LIMIT
                     5;  -- Limit to top 5
             """
+
         credits_by_warehouse_data = execute_query(conn, query_credits_by_warehouse)
+
         if not credits_by_warehouse_data:
             st.warning("No data available for credits used by warehouse.")
         else:
             df_credits_by_warehouse = pd.DataFrame(credits_by_warehouse_data, columns=[
-                'Warehouse Name', 'Credits Used by Cloud Services', 'Credits Used by Compute', 'Total Credits Used'
+                'Warehouse Name', 'Credits Used by Cloud Services', 'Credits Used by Compute'
             ])
+
             # Create a bar chart to display credits used by Cloud Services and Compute by Warehouse
             fig_credits_by_warehouse = px.histogram(df_credits_by_warehouse, x='Warehouse Name', y=[
-                'Credits Used by Cloud Services', 'Credits Used by Compute', 'Total Credits Used'
+                'Credits Used by Cloud Services', 'Credits Used by Compute'
             ], title='Top 5 Warehouses by Credits Used for Cloud Services and Compute')
+
             # Rotate the y-axis labels for better readability
             fig_credits_by_warehouse.update_layout(xaxis_tickangle=-45)
+
             st.plotly_chart(fig_credits_by_warehouse)
+
     # Call the function to display top 5 credits used by Cloud Services and Compute by Warehouse
     display_top_5_credits_by_warehouse(conn, selected_environments)
-    # Define the SQL query as a constant
-    CREDITS_BY_WAREHOUSE_QUERY = """
-        SELECT
-            warehouse_name,
-            SUM(credits_used_cloud_services) AS credits_used_cloud_services,
-            SUM(credits_used_compute) AS credits_used_compute,
-            SUM(credits_used) AS credits_used
-        FROM
-            snowflake.account_usage.warehouse_metering_history
-        GROUP BY
-            1
-        ORDER BY
-            credits_used DESC
-        LIMIT
-            5;  -- Limit to top 5
-    """
     conn.close()
 
 
