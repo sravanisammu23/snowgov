@@ -40,7 +40,7 @@ def snowflake_connection():
     #st.title("LOGIN:")
     account_name = st.text_input("Name this Connection:")
     account_url = st.text_input("Account URL:")
-    username = st.text_input("**Username:**")
+    username = st.text_input("Username:")
     password = st.text_input("Password:", type="password")
     account_parts = account_url.split('.') if account_url else []
     snowflake_account = account_parts[0] if len(account_parts) > 0 else ""
