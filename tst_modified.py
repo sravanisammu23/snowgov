@@ -707,7 +707,7 @@ def monitor3():
             # Create a bar chart to display top 5 warehouse performance by query type
             df_performance_by_query_type = df_performance_by_query_type.sort_values(by='Average Execution Time (seconds)', ascending=False)
             fig_performance_by_query_type = px.bar(df_performance_by_query_type, x='Warehouse Name', y='Average Execution Time (seconds)', color='Query Type',
-                                                title='Top 5 Warehouse Performance by Query Type')
+                                                title='Top 5 Warehouses Performance by Query Type')
             st.plotly_chart(fig_performance_by_query_type)
 
 
