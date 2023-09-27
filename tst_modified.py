@@ -13,14 +13,14 @@ from utils import sql as sql
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('image_1.png')
+image = Image.open('Hackathon/SnowGov.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
-    "account": "ie30988.ap-southeast-1",
-    "user": "snowgov",
-    "password": "G@nesh2$3",
+    "account": "pr65711.ap-southeast-1",
+    "user": "snowgovernance",
+    "password": "Sravani@23",
     "role": "accountadmin",
     "warehouse": "COMPUTE_WH",
     "database": "UTIL_DB",
