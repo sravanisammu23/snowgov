@@ -18,9 +18,9 @@ st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=F
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
-    "account": "ie30988.ap-southeast-1",
-    "user": "snowgov",
-    "password": "G@nesh2$3",
+    "account": "pr65711.ap-southeast-1",
+    "user": "snowgovernance",
+    "password": "Sravani@23",
     "role": "accountadmin",
     "warehouse": "COMPUTE_WH",
     "database": "UTIL_DB",
@@ -1023,6 +1023,204 @@ def monitor2():
         height=200,
         use_container_width=True,
     )
+    
+    MOST_NUM_QUERIES_SQL = """
+
+    SELECT * FROM (
+
+        SELECT current_account() as account,
+
+            current_region() as region,
+
+            user_name,
+
+            warehouse_name,
+
+            ROUND(SUM(execution_time)/(1000*60*60),1) exec_hrs,
+
+            COUNT(1) AS num_queries
+
+        FROM snowflake.account_usage.query_history
+
+        WHERE start_time BETWEEN %(date_from)s AND %(date_to)s
+
+        GROUP BY 1,2,3,4
+
+    ) QRY
+
+    ORDER BY num_queries DESC
+
+    LIMIT 10;
+
+    """
+
+ 
+
+ 
+
+    # Execute the new SQL Query and get the DataFrame
+
+    with snowflake.connector.connect(**SNOWFLAKE_CONFIG) as conn:
+
+        cur = conn.cursor(snowflake.connector.DictCursor)
+
+        cur.execute(
+
+            MOST_NUM_QUERIES_SQL,
+
+            {"date_from": date_from, "date_to": date_to}
+
+        )
+
+        most_num_queries_df = pd.DataFrame(cur.fetchall())
+
+        most_num_queries_df.columns = [col[0] for col in cur.description]
+
+ 
+
+    # If DataFrame is not empty, display the Pie Chart
+
+    if not most_num_queries_df.empty:
+
+        # Sort the DataFrame by 'NUM_QUERIES' in descending order
+
+        most_num_queries_df = most_num_queries_df.sort_values(by='NUM_QUERIES', ascending=False)
+
+        st.markdown("  \n")  # Adds a newline as a space
+
+        st.markdown("**Distribution of Queries Executed by User**")
+
+ 
+
+        # Create a pie chart using Plotly Express
+
+        fig = px.pie(most_num_queries_df,
+
+                    names='USER_NAME',
+
+                    values='NUM_QUERIES')
+
+ 
+
+        # Adjusting the layout for better readability
+
+        fig.update_traces(textinfo='label+percent')  # 'label+percent' shows the label and percentage on the pie chart.
+
+        fig.update_layout(margin={"r":0,"t":40,"l":0,"b":0})  # Adjusting margins for better layout
+
+ 
+
+        # Display the graph
+
+        st.plotly_chart(fig)
+
+    else:
+
+        st.write("No data available for the given date range.")
+
+ 
+
+    MOST_EXEC_HRS_SQL = """
+
+    SELECT * FROM (
+
+        SELECT current_account() as account,
+
+            current_region() as region,
+
+            user_name,
+
+            warehouse_name,
+
+            ROUND(SUM(execution_time)/(1000*60*60),1) exec_hrs,
+
+            COUNT(1) AS num_queries
+
+        FROM snowflake.account_usage.query_history
+
+        WHERE start_time BETWEEN %(date_from)s AND %(date_to)s
+
+        GROUP BY 1,2,3,4
+
+    ) QRY
+
+    ORDER BY exec_hrs DESC
+
+    LIMIT 10;
+
+    """
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+    # Correctly execute the new SQL Query and get the DataFrame
+
+    with snowflake.connector.connect(**SNOWFLAKE_CONFIG) as conn:
+
+        cur = conn.cursor(snowflake.connector.DictCursor)
+
+        cur.execute(MOST_EXEC_HRS_SQL, {"date_from": date_from, "date_to": date_to})
+
+        most_exec_hrs_df = pd.DataFrame(cur.fetchall())
+
+        most_exec_hrs_df.columns = [col[0] for col in cur.description]
+
+ 
+
+ 
+
+# If DataFrame is not empty, display the Bar Chart
+
+    if not most_exec_hrs_df.empty:
+
+        # Create a Plotly Bar Chart without displaying execution hours on the bars
+
+        fig = px.bar(most_exec_hrs_df,
+
+                    x='USER_NAME',
+
+                    y='EXEC_HRS',
+
+                    labels={'USER_NAME': 'User Name', 'EXEC_HRS': 'Execution Hours'},
+
+                    title='Users with Most Query Execution Hours')
+
+ 
+
+        # Update layout for a cleaner appearance
+
+        fig.update_layout(
+
+            uniformtext_minsize=8,
+
+            uniformtext_mode='hide',
+
+            xaxis_title='Users',
+
+            yaxis_title='Execution Hours (hrs)',
+
+            bargap=0.2,  # gap between bars
+
+            bargroupgap=0.1  # gap between groups
+
+        )
+
+ 
+
+        # Display the Plotly Chart
+
+        st.plotly_chart(fig)
+
+    else:
+
+        st.write("No data available for the given date range.")
 def about():
 
     # Create an expander for the about section
