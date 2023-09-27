@@ -587,7 +587,7 @@ def monitor3():
         df_credits = df_credits.sort_values(by='Credits', ascending=False)  # Sort in descending order by credits
         top_5_warehouses = df_credits.head(5)  # Select the top 5 warehouses (top 5 in descending order)
         # Creating a pie chart for the top 5 warehouses by credits
-        fig = px.pie(top_5_warehouses, names='Warehouse', values='Credits', title='Top 5 Warehouses by Credits')
+        fig = px.pie(top_5_warehouses, names='Warehouse', values='Credits', title='Top 5 Warehouses by Credits(percentage)')
         # Displaying the pie chart
         st.plotly_chart(fig)
     # Hourly Credits
@@ -790,6 +790,9 @@ def monitor3():
             5;  -- Limit to top 5
     """
     conn.close()
+
+
+
 def monitor2():
     with st.sidebar:
         date_from, date_to = gui.date_selector()
@@ -925,7 +928,7 @@ def monitor2():
         queries_data.WAREHOUSE_NAME.eq(selected_warehouse)
     ]
     gui.subsubheader(
-        "Histogram of **queries duration** (in secs)"
+        "Histogram of **queries duration** (in secs)", "Log scale"
     )
     # Histogram
     histogram = charts.get_histogram_chart(
@@ -980,7 +983,7 @@ def monitor2():
     gui.space(1)
     gui.subsubheader(
         "**Query VS Time Frequency**: longest and most frequent queries",
-        
+        "Log scales (🖱️ hover for real values!)",
     )
     queries_agg = sf.sql_to_dataframe(
         sql.QUERIES_COUNT_QUERY.format(
@@ -1023,204 +1026,154 @@ def monitor2():
         height=200,
         use_container_width=True,
     )
-    
     MOST_NUM_QUERIES_SQL = """
-
     SELECT * FROM (
-
         SELECT current_account() as account,
-
             current_region() as region,
-
             user_name,
-
             warehouse_name,
-
             ROUND(SUM(execution_time)/(1000*60*60),1) exec_hrs,
-
             COUNT(1) AS num_queries
-
         FROM snowflake.account_usage.query_history
-
         WHERE start_time BETWEEN %(date_from)s AND %(date_to)s
-
         GROUP BY 1,2,3,4
-
     ) QRY
-
     ORDER BY num_queries DESC
-
     LIMIT 10;
-
     """
 
- 
-
- 
 
     # Execute the new SQL Query and get the DataFrame
-
     with snowflake.connector.connect(**SNOWFLAKE_CONFIG) as conn:
-
         cur = conn.cursor(snowflake.connector.DictCursor)
-
         cur.execute(
-
             MOST_NUM_QUERIES_SQL,
-
             {"date_from": date_from, "date_to": date_to}
-
         )
-
         most_num_queries_df = pd.DataFrame(cur.fetchall())
-
         most_num_queries_df.columns = [col[0] for col in cur.description]
 
- 
-
     # If DataFrame is not empty, display the Pie Chart
-
     if not most_num_queries_df.empty:
-
         # Sort the DataFrame by 'NUM_QUERIES' in descending order
-
         most_num_queries_df = most_num_queries_df.sort_values(by='NUM_QUERIES', ascending=False)
-
         st.markdown("  \n")  # Adds a newline as a space
-
         st.markdown("**Distribution of Queries Executed by User**")
 
- 
-
         # Create a pie chart using Plotly Express
-
         fig = px.pie(most_num_queries_df,
-
                     names='USER_NAME',
-
                     values='NUM_QUERIES')
 
- 
-
         # Adjusting the layout for better readability
-
         fig.update_traces(textinfo='label+percent')  # 'label+percent' shows the label and percentage on the pie chart.
-
         fig.update_layout(margin={"r":0,"t":40,"l":0,"b":0})  # Adjusting margins for better layout
 
- 
-
         # Display the graph
-
         st.plotly_chart(fig)
-
     else:
-
         st.write("No data available for the given date range.")
-
- 
 
     MOST_EXEC_HRS_SQL = """
-
     SELECT * FROM (
-
         SELECT current_account() as account,
-
             current_region() as region,
-
             user_name,
-
             warehouse_name,
-
             ROUND(SUM(execution_time)/(1000*60*60),1) exec_hrs,
-
             COUNT(1) AS num_queries
-
         FROM snowflake.account_usage.query_history
-
         WHERE start_time BETWEEN %(date_from)s AND %(date_to)s
-
         GROUP BY 1,2,3,4
-
     ) QRY
-
     ORDER BY exec_hrs DESC
-
     LIMIT 10;
-
     """
 
- 
 
- 
 
- 
 
- 
-
- 
 
     # Correctly execute the new SQL Query and get the DataFrame
-
     with snowflake.connector.connect(**SNOWFLAKE_CONFIG) as conn:
-
         cur = conn.cursor(snowflake.connector.DictCursor)
-
         cur.execute(MOST_EXEC_HRS_SQL, {"date_from": date_from, "date_to": date_to})
-
         most_exec_hrs_df = pd.DataFrame(cur.fetchall())
-
         most_exec_hrs_df.columns = [col[0] for col in cur.description]
 
- 
-
- 
 
 # If DataFrame is not empty, display the Bar Chart
-
     if not most_exec_hrs_df.empty:
-
         # Create a Plotly Bar Chart without displaying execution hours on the bars
-
         fig = px.bar(most_exec_hrs_df,
-
                     x='USER_NAME',
-
                     y='EXEC_HRS',
-
                     labels={'USER_NAME': 'User Name', 'EXEC_HRS': 'Execution Hours'},
-
                     title='Users with Most Query Execution Hours')
 
- 
-
         # Update layout for a cleaner appearance
-
         fig.update_layout(
-
             uniformtext_minsize=8,
-
             uniformtext_mode='hide',
-
             xaxis_title='Users',
-
             yaxis_title='Execution Hours (hrs)',
-
             bargap=0.2,  # gap between bars
-
             bargroupgap=0.1  # gap between groups
-
         )
 
- 
-
         # Display the Plotly Chart
+        st.plotly_chart(fig)
+    else:
+        st.write("No data available for the given date range.")
+
+
+    LOW_ACCESS_HIGH_VOLUME_SQL = """
+    SELECT * FROM
+    (
+        select distinct current_account() as account, current_region() as region, ROW_COUNT,  TAB.TABLE_NAME, TABLE_TYPE, DATABASE_NAME, SCHEMA_NAME, USERS, QUERIES from
+        (SELECT
+        split_part(f1.value:"objectName"::string, '.', 1) AS database_name
+        ,split_part(f1.value:"objectName"::string, '.', 2) AS schema_name
+        ,split_part(f1.value:"objectName"::string, '.', 3) AS table_name
+        ,COUNT(DISTINCT USER_NAME) AS users
+        ,COUNT(DISTINCT QUERY_ID) AS queries
+        FROM SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY
+        , lateral flatten(base_objects_accessed) f1  GROUP BY 1,2,3) QH,
+        (select ROW_COUNT,TABLE_NAME, TABLE_SCHEMA, TABLE_TYPE from "SNOWFLAKE"."ACCOUNT_USAGE"."TABLES"
+        where DELETED is null) TAB where TAB.TABLE_NAME = QH.TABLE_NAME
+        and (QH.USERS < 2 and QH.QUERIES < 5)
+    )
+    order by ROW_COUNT desc,9,8
+    limit 10;
+    """
+
+    def load_data():
+        with snowflake.connector.connect(**SNOWFLAKE_CONFIG) as conn:
+            cur = conn.cursor(snowflake.connector.DictCursor)
+            cur.execute(LOW_ACCESS_HIGH_VOLUME_SQL)
+            df = pd.DataFrame(cur.fetchall())
+            df.columns = [col[0] for col in cur.description]
+        return df
+
+
+
+    df = load_data()
+
+    if not df.empty:
+        fig = px.bar(df, x='TABLE_NAME', y='ROW_COUNT',
+
+                    labels={'TABLE_NAME': 'Table Name', 'ROW_COUNT': 'Row Count'},
+                    title='Low Accessibility, High Data Volume')
+
+        fig.update_layout(xaxis_title='Table',
+                        yaxis_title='Row Count',
+                        bargap=0.2,
+                        bargroupgap=0.1)
 
         st.plotly_chart(fig)
-
     else:
+        st.write("No data available.")
 
-        st.write("No data available for the given date range.")
 def about():
 
     # Create an expander for the about section
