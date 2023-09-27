@@ -1049,33 +1049,16 @@ def about():
     if des1 == "SNOWGOV":
 
         with st.expander('**Description**', expanded=False):
-
-        # Load and display the image with adjusted width
-
-       
-
-        # Write the about content with styling
-
             st.markdown("""
-
             <div style="font-size:14px;">
-
                 <p style="font-size:14px;">This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
-
                 <ul style="font-size:14px;">
-
                     <li style="font-size:14px;">User interface through which the IT team can configure Organization and Account Parameters</li>
-
                     <li style="font-size:14px;">User Interface through which IT teams can create Projects (a logical entity). For each Project, they can create multiple Environments (Dev, Stage, Production). Internally for each environment, the app creates Databases or schemas depending on configuration. For each project and environment, provide a GUI to create warehouses</li>
-
                     <li style="font-size:14px;">Onboard users to projects and assign respective roles on each environment (i.e. Database or Schemas)</li>
-
                     <li style="font-size:14px;">Provide Cost-monitoring dashboards drilled down by Accounts, Projects, Environments, Users, etc.</li>
-
                 </ul>
-
             </div>
-
             """, unsafe_allow_html=True)
 
    
