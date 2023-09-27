@@ -558,10 +558,10 @@ def monitor3():
         st.warning("Please select at least one option for the Environment filter.")
         return
     if selected_environments:
-        projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
+        Business unit = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
         selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
     # Subject Area Filter
-        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
+        Project = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
         selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
         # Constructing Query based on Graph Option
         query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
@@ -1031,7 +1031,6 @@ def about():
         st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
         # Write the about content with styling
         st.markdown("""
-            <div style="font-family: 'Sans-serif';">
                 <p>This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
                 <ul>
                     <li>User interface through which the IT team can configure Organization and Account Parameters</li>
