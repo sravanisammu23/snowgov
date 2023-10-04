@@ -553,23 +553,23 @@ def monitor3():
         start_date = datetime.now() - timedelta(days=365)
     end_date = datetime.now()
     # Environment Filter
-    environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
-    selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
-    if not selected_environments:
-        st.warning("Please select at least one option for the Environment filter.")
-        return
-    
-    if selected_environments:
-        projects = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']))
-        selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
-    
-    # Subject Area Filter
-    subject_areas = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]))
-    selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
-    
-    # Constructing Query based on Graph Option
-    query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
-    warehouse_credits = execute_query(conn, query_credits)
+        environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
+        selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
+        if not selected_environments:
+            st.warning("Please select at least one option for the Environment filter.")
+            return
+        
+        if selected_environments:
+            projects = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']))
+            selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
+        
+        # Subject Area Filter
+        subject_areas = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]))
+        selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
+        
+        # Constructing Query based on Graph Option
+        query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
+        warehouse_credits = execute_query(conn, query_credits)
 
         if not warehouse_credits:
             st.warning("No data available for the selected filters.")
