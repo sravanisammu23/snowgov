@@ -553,33 +553,33 @@ def monitor3():
         start_date = datetime.now() - timedelta(days=365)
     end_date = datetime.now()
     # Environment Filter
-        environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
-        selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
-        if not selected_environments:
-            st.warning("Please select at least one option for the Environment filter.")
-            return
+    environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
+    selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
+    if not selected_environments:
+    st.warning("Please select at least one option for the Environment filter.")
+    return
         
-        if selected_environments:
-            projects = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']))
-            selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
+    if selected_environments:
+    projects = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']))
+    selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
         
         # Subject Area Filter
-        subject_areas = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]))
-        selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
+    subject_areas = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]))
+    selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
         
         # Constructing Query based on Graph Option
-        query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
-        warehouse_credits = execute_query(conn, query_credits)
+    query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
+    warehouse_credits = execute_query(conn, query_credits)
 
-        if not warehouse_credits:
-            st.warning("No data available for the selected filters.")
-        else:
-            df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
-            df_credits = df_credits.sort_values(by='Credits', ascending=True)  # Sort in ascending order by credits
-            top_5_warehouses = df_credits.tail(5)  # Select the last 5 warehouses (top 5 in ascending order)
-            fig = px.bar(top_5_warehouses, y='Warehouse', x='Credits', title='Top 5 Warehouses by Credits', orientation='h')
-            fig.update_yaxes(tickformat=".15f")
-            st.plotly_chart(fig)
+    if not warehouse_credits:
+    st.warning("No data available for the selected filters.")
+    else:
+    df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
+    df_credits = df_credits.sort_values(by='Credits', ascending=True)  # Sort in ascending order by credits
+    top_5_warehouses = df_credits.tail(5)  # Select the last 5 warehouses (top 5 in ascending order)
+    fig = px.bar(top_5_warehouses, y='Warehouse', x='Credits', title='Top 5 Warehouses by Credits', orientation='h')
+    fig.update_yaxes(tickformat=".15f")
+    st.plotly_chart(fig)
 # ...
     # Existing logic to construct the query and execute it
     query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
