@@ -26,7 +26,7 @@ from PIL import Image
 
 import plotly.express as px
 
-image = Image.open('C:\\Users\\sravani.sammu\\Downloads\\image.png')
+image = Image.open('image_1.png')
 
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 
