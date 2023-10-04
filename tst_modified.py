@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import snowflake.connector
-import snowflake.connector.errors 
+import snowflake.connector.errors  # <-- Corrected import
 from streamlit_option_menu import option_menu
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,11 +11,12 @@ from utils import charts, gui, processing
 from utils import snowflake_connector as sf
 from utils import sql as sql
 from PIL import Image
+import altair as alt
 import base64
 import plotly.express as px
-image = Image.open('image_1.png')
+image = Image.open('C:\\Users\\sravani.sammu\\Downloads\\image.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
-#snowflake_config = st.secrets["sf_usage_app"]
+snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
     "account": "pr65711.ap-southeast-1",
@@ -101,13 +102,13 @@ def create_schema(conn, environment, team_name, sub_team_name, schema_name, powe
 def database_management():
     choose = option_menu(
         menu_title="PROJECT SPACE",
-        options=["DATABASE", "SCHEMA"], 
+        options=["Database", "Schema"],
         icons=["database-fill-add", "database-fill-lock"],
         orientation="horizontal",
         menu_icon="database-fill-gear",
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
@@ -116,26 +117,26 @@ def database_management():
     environment = ''
     db_team_name = ''
     db_sub_team_name = ''
-    if choose == 'DATABASE':
+    if choose == 'Database':
         #st.write("Create DataBase")
-        environment = st.selectbox('**ENVIRONMENT :**', ['DEV', 'PROD', 'STAGE', 'TEST'])
-        db_team_name = st.text_input('**BUSINESS UNIT :**', key="db_team_name_input")
-        db_sub_team_name = st.text_input('**PROJECT :**', key="db_sub_team_name_input")
+        environment = st.selectbox('ENVIRONMENT :', ['DEV', 'PROD', 'STAGE', 'TEST'])
+        db_team_name = st.text_input('BUSINESS UNIT :', key="db_team_name_input")
+        db_sub_team_name = st.text_input('PROJECT :', key="db_sub_team_name_input")
         # Store the values in session_state
         st.session_state.environment = environment
         st.session_state.db_team_name = db_team_name
         st.session_state.db_sub_team_name = db_sub_team_name
-        if st.button('**SETUP**'):
+        if st.button('SETUP'):
             set_role(conn, "ACCOUNTADMIN")
             message = create_database_and_schema(conn, environment, db_team_name, db_sub_team_name)
             st.write(message)
-    if choose == 'SCHEMA':
+    if choose == 'Schema':
         #st.write("Create Schema")
         # Retrieve the values from session_state to pre-populate the input fields
-        schema_name = st.text_input("**SCHEMA NAME :**", key="schema_name_input")
-        schema_env = st.text_input("**ENVIRONMENT :**", st.session_state.get('environment', ''), key="schema_env_input")
-        schema_team_name = st.text_input('**BUSINESS UNIT :**', st.session_state.get('db_team_name', ''), key="schema_team_name_input")
-        schema_sub_team_name = st.text_input('**PROJECT :**', st.session_state.get('db_sub_team_name', ''), key="schema_sub_team_name_input")
+        schema_name = st.text_input("SCHEMA NAME :", key="schema_name_input")
+        schema_env = st.text_input("ENVIRONMENT :", st.session_state.get('environment', ''), key="schema_env_input")
+        schema_team_name = st.text_input('BUSINESS UNIT :', st.session_state.get('db_team_name', ''), key="schema_team_name_input")
+        schema_sub_team_name = st.text_input('PROJECT :', st.session_state.get('db_sub_team_name', ''), key="schema_sub_team_name_input")
         # Using st.expander for Privilege Assignment
         with st.expander("PRIVILEGE ASSIGNMENT"):
             privilege_options = ["Read Only", "Read/Write", "Full Access"]
@@ -144,7 +145,7 @@ def database_management():
             data_engineer_privilege = st.selectbox("DATA ENGINEER", privilege_options, index=0)
             if power_user_privilege == "Read Only" and analyst_privilege == "Full Access":
                 st.write("Invalid combination: POWER USER cannot have lower privileges than ANALYST.")
-        if st.button('CREATE'):
+        if st.button('Create'):
             set_role(conn, "ACCOUNTADMIN")
             message = create_schema(conn, schema_env, schema_team_name, schema_sub_team_name, schema_name,
                                     power_user_privilege, analyst_privilege, data_engineer_privilege)
@@ -161,40 +162,40 @@ def create_snowflake_user(user_name, f_name, l_name, email):
 def user_creation_page():
     not_required = option_menu(
         menu_title = "USER CREATION",
-        options = ["USER"],
+        options = ["User"],
         icons=['person-bounding-box'],
         menu_icon ='person-fill-add',
          styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "container": {"padding": "0!important"},
+        "nav-link": { "text-align": "left", "margin":"0px"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
     user_name = st.text_input("**USERNAME :**")
-    f_name = st.text_input("**FIRST NAME :**")
-    l_name = st.text_input("**LAST NAME :**")
-    email = st.text_input("**EMAIL :**")
-    if st.button("CREATE"):
+    f_name = st.text_input("FIRST NAME :")
+    l_name = st.text_input("LAST NAME :")
+    email = st.text_input("EMAIL :")
+    if st.button("Create"):
         result = create_snowflake_user(user_name, f_name, l_name, email)
         st.write(result)  # This will display "User already exists!" if the user already exists
 def role_manage():
     role_choice = option_menu(
-        menu_title = "ROLE MANAGEMENT",
-        options = ["ROLE ASSIGN","LIST USERS","REVOKE ROLE"],
+        menu_title = "Role Management",
+        options = ["Role Assign","List Users","Revoke Role"],
         icons = ["person-check","person-video2","person-fill-slash"],
         orientation = 'horizontal',
         menu_icon = 'person-fill-gear',
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
-    if role_choice == 'ROLE ASSIGN':
+    if role_choice == 'Role Assign':
         role_assignment()
-    if role_choice == 'LIST USERS':
+    if role_choice == 'List Users':
         role_list()
-    if role_choice == 'REVOKE ROLE':
+    if role_choice == 'Revoke Role':
         revoke_role()
 def fetch_roles_for_user3(username):
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
@@ -223,17 +224,17 @@ def revoke_role():
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
     users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
     con.close()
-    selected_user = st.selectbox('**SELECT USER**', users)
+    selected_user = st.selectbox('Select User', users)
     roles_table_data = fetch_roles_for_user3(selected_user)
     if not roles_table_data:
         st.warning(f'No roles assigned to {selected_user} yet.')
     else:
-        with st.expander("**Roles already assigned**"):
+        with st.expander("Roles already assigned"):
             st.table(roles_table_data)
-    roles_to_revoke = st.multiselect('**SELECT ROLES TO REVOKE**', [row['Role Name'] for row in roles_table_data])
+    roles_to_revoke = st.multiselect('Select Roles to Revoke', [row['Role Name'] for row in roles_table_data])
     if st.button('Revoke Roles'):
         if not roles_to_revoke:
-            st.warning('**Please select roles to revoke.**')
+            st.warning('Please select roles to revoke.')
         else:
             result_message = revoke_roles_and_log_using_sp3(selected_user, roles_to_revoke)
             st.write(result_message)
@@ -287,7 +288,7 @@ def role_list():
     conn.close()
     return
     # Role selection
-  chosen_role = st.selectbox('**SELECT A ROLE**', roles)
+  chosen_role = st.selectbox('Select a Role', roles)
     # Fetch users for the selected role
   users = fetch_users_for_role2(conn, chosen_role)
     # Display users in a table without index
@@ -338,40 +339,39 @@ def role_assignment():
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
     users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
     con.close()
-    selected_user = st.selectbox('**SELECT USER**', users)
+    selected_user = st.selectbox('Select User', users)
     granted_roles_data = fetch_roles_for_user(selected_user)
     granted_roles = [row['Role Name'] for row in granted_roles_data]
     if not granted_roles_data:
         st.warning(f'No roles assigned to {selected_user} yet.')
     else:
-        with st.expander("**ROLES ALREADY ASSIGNED**"):
+        with st.expander("Roles already assigned"):
             st.table(granted_roles_data)
     # Fetch all roles and filter out the roles already granted
     all_roles = fetch_all_roles()
     roles_to_display = list(set(all_roles) - set(granted_roles))
-    roles_to_grant = st.multiselect('**SELECT ROLES TO GRANT**', roles_to_display)
+    roles_to_grant = st.multiselect('Select Roles to Grant', roles_to_display)
     if st.button('Assign Roles'):
         if not roles_to_grant:
-            st.warning('**Please select roles to grant.**')
+            st.warning('Please select roles to grant.')
         else:
             result_message = grant_roles_and_log_using_sp(selected_user, roles_to_grant)
             st.write(result_message)
 def monitor():
     dont_choose = option_menu(
         menu_title="CREDITS USAGE",
-        options=["ACCOUNT USAGE", "DETAIL METRICS"],
+        options=["Account Usage", "Detail Metrics"],
         icons=["display-fill", "display-fill"],
-        menu_icon='coin',
         orientation="horizontal",
          styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
     }
     )
-    if dont_choose == "ACCOUNT USAGE":
+    if dont_choose == "Account Usage":
         monitor2()
-    elif dont_choose == "DETAIL METRICS":
+    elif dont_choose == "Detail Metrics":
         monitor3()
 def execute_query(conn, query):
     cur = conn.cursor()
@@ -419,7 +419,7 @@ def construct_subject_query(environments, projects):
         """
     elif environments:
         return f"""
-            SELECT DISTINCT trim(tag_value)
+            SELECT DISTINCT tag_value
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
             WHERE LEFT(object_name, 4) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
         """
@@ -436,7 +436,7 @@ def construct_subject_query(environments, projects):
         """
     else:
         return """
-            SELECT DISTINCT (tag_value)
+            SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
             WHERE domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
         """
@@ -556,30 +556,28 @@ def monitor3():
     environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
     selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
     if not selected_environments:
-    st.warning("Please select at least one option for the Environment filter.")
-    return
-        
+        st.warning("Please select at least one option for the Environment filter.")
+        return
     if selected_environments:
-    projects = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']))
-    selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
-        
-        # Subject Area Filter
-    subject_areas = list(set(['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]))
-    selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
-        
-        # Constructing Query based on Graph Option
-    query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
-    warehouse_credits = execute_query(conn, query_credits)
+        projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
+        selected_projects = st.sidebar.multiselect('PROJECT :', projects, default=['All'])
+    # Subject Area Filter
+        subject_areas_query_result = execute_query(conn, construct_subject_query(selected_environments, selected_projects))
+        subject_areas = list(set(['All'] + [result[0].strip() for result in subject_areas_query_result if result[0] is not None and result[0].strip() != '']))
+        selected_subject_areas = st.sidebar.multiselect('SUBJECT AREA :', subject_areas, default=['All'])
 
-    if not warehouse_credits:
-    st.warning("No data available for the selected filters.")
-    else:
-    df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
-    df_credits = df_credits.sort_values(by='Credits', ascending=True)  # Sort in ascending order by credits
-    top_5_warehouses = df_credits.tail(5)  # Select the last 5 warehouses (top 5 in ascending order)
-    fig = px.bar(top_5_warehouses, y='Warehouse', x='Credits', title='Top 5 Warehouses by Credits', orientation='h')
-    fig.update_yaxes(tickformat=".15f")
-    st.plotly_chart(fig)
+        # Constructing Query based on Graph Option
+        query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
+        warehouse_credits = execute_query(conn, query_credits)
+        if not warehouse_credits:
+            st.warning("No data available for the selected filters.")
+        else:
+            df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
+            df_credits = df_credits.sort_values(by='Credits', ascending=True)  # Sort in ascending order by credits
+            top_5_warehouses = df_credits.tail(5)  # Select the last 5 warehouses (top 5 in ascending order)
+            fig = px.bar(top_5_warehouses, y='Warehouse', x='Credits', title='Top 5 Warehouses by Credits', orientation='h')
+            fig.update_yaxes(tickformat=".15f")
+            st.plotly_chart(fig)
 # ...
     # Existing logic to construct the query and execute it
     query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
@@ -591,7 +589,7 @@ def monitor3():
         df_credits = df_credits.sort_values(by='Credits', ascending=False)  # Sort in descending order by credits
         top_5_warehouses = df_credits.head(5)  # Select the top 5 warehouses (top 5 in descending order)
         # Creating a pie chart for the top 5 warehouses by credits
-        fig = px.pie(top_5_warehouses, names='Warehouse', values='Credits', title='Top 5 Warehouses by Credits(percentage)')
+        fig = px.pie(top_5_warehouses, names='Warehouse', values='Credits', title='Top 5 Warehouses by Credits')
         # Displaying the pie chart
         st.plotly_chart(fig)
     # Hourly Credits
@@ -663,60 +661,6 @@ def monitor3():
     display_top_10_users(conn)
 
 
-
-
-      # Define a function to fetch and display top 5 warehouses performance by query type
-    def display_top_5_warehouse_performance_by_query_type(conn, selected_environments):
-        # Construct the SQL query based on the selected environments
-        if 'All' in selected_environments:
-            query_performance_by_query_type = """
-                SELECT
-                    warehouse_name,
-                    query_type,
-                    AVG(execution_time) AS avg_execution_time_seconds
-                FROM
-                    snowflake.account_usage.query_history
-                GROUP BY
-                    warehouse_name, query_type
-                ORDER BY
-                    warehouse_name, avg_execution_time_seconds DESC
-                LIMIT 5;
-            """
-        else:
-            selected_env_str = ', '.join([f"'{env[:4]}'" for env in selected_environments])
-            query_performance_by_query_type = f"""
-                SELECT
-                    warehouse_name,
-                    query_type,
-                    AVG(execution_time) AS avg_execution_time_seconds
-                FROM
-                    snowflake.account_usage.query_history
-                WHERE
-                    LEFT(warehouse_name, 4) IN ({selected_env_str})
-                GROUP BY
-                    warehouse_name, query_type
-                ORDER BY
-                    warehouse_name, avg_execution_time_seconds DESC
-                LIMIT 5;
-            """
-
-        performance_by_query_type_data = execute_query(conn, query_performance_by_query_type)
-
-        if not performance_by_query_type_data:
-            st.warning("No data available for top 5 warehouses performance by query type.")
-        else:
-            df_performance_by_query_type = pd.DataFrame(performance_by_query_type_data, columns=[
-                'Warehouse Name', 'Query Type', 'Average Execution Time (seconds)'
-            ])
-
-            # Create a bar chart to display top 5 warehouse performance by query type
-            df_performance_by_query_type = df_performance_by_query_type.sort_values(by='Average Execution Time (seconds)', ascending=False)
-            fig_performance_by_query_type = px.bar(df_performance_by_query_type, x='Warehouse Name', y='Average Execution Time (seconds)', color='Query Type',
-                                                title='Top 5 Warehouses Performance by Query Type')
-            st.plotly_chart(fig_performance_by_query_type)
-
-
-   
     # Define a function to fetch and display top 5 credits used by Cloud Services and Compute by Warehouse
     def display_top_5_credits_by_warehouse(conn, selected_environments):
         if 'All' in selected_environments:
@@ -774,7 +718,13 @@ def monitor3():
 
     # Call the function to display top 5 credits used by Cloud Services and Compute by Warehouse
     display_top_5_credits_by_warehouse(conn, selected_environments)
-    conn.close()
+
+
+
+
+
+
+
 
 
 
@@ -1159,106 +1109,48 @@ def monitor2():
     else:
         st.write("No data available.")
 
+
+
+
+
+
+
+
+
+
+
 def about():
-
     # Create an expander for the about section
-
-    des1=option_menu(
-
-        menu_title =None,
-
-        options=["SNOWGOV"],
-
-        icons = ["snow2"],
-
-        styles={
-
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-
-        "nav-link-selected": {"background-color": "#0096FF"},
-
-             }
-
-    )
-
-    if des1 == "SNOWGOV":
-
-        with st.expander('**Description**', expanded=False):
-            st.markdown("""
-            <div style="font-size:14px;">
-                <p style="font-size:14px;">This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
-                <ul style="font-size:14px;">
-                    <li style="font-size:14px;">User interface through which the IT team can configure Organization and Account Parameters</li>
-                    <li style="font-size:14px;">User Interface through which IT teams can create Projects (a logical entity). For each Project, they can create multiple Environments (Dev, Stage, Production). Internally for each environment, the app creates Databases or schemas depending on configuration. For each project and environment, provide a GUI to create warehouses</li>
-                    <li style="font-size:14px;">Onboard users to projects and assign respective roles on each environment (i.e. Database or Schemas)</li>
-                    <li style="font-size:14px;">Provide Cost-monitoring dashboards drilled down by Accounts, Projects, Environments, Users, etc.</li>
+    with st.expander("About", expanded=True):
+        # Load and display the image with adjusted width
+        image_path = 'C:\\Users\\sravani.sammu\\Downloads\\image.png'
+        image = Image.open(image_path)
+        st.image(image, caption=None, width=300, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+        # Write the about content with styling
+        st.markdown("""
+            <div style="font-family: 'Sans-serif';">
+                <p>This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
+                <ul>
+                    <li>User interface through which the IT team can configure Organization and Account Parameters</li>
+                    <li>User Interface through which IT teams can create Projects (a logical entity). For each Project, they can create multiple Environments (Dev, Stage, Production). Internally for each environment, the app creates Databases or schemas depending on configuration. For each project and environment, provide a GUI to create warehouses</li>
+                    <li>Onboard users to projects and assign respective roles on each environment (i.e. Database or Schemas)</li>
+                    <li>Provide Cost-monitoring dashboards drilled down by Accounts, Projects, Environments, Users, etc.</li>
                 </ul>
             </div>
             """, unsafe_allow_html=True)
 
-   
 
-    faq=option_menu(
 
-        menu_title =None,
-
-        options=["FAQ's"],
-
-        icons =["bookmarks-fill"],
-
-        styles={
-
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-
-        "nav-link": {"font-family":"Sans serif","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-
-        "nav-link-selected": {"background-color": "#0096FF"},
-
-             }
-
-    )
-
-    if faq == "FAQ's":
-
-        with st.expander("**What is SnowGov, and why do I need it?**",expanded=False):
-
-            st.markdown("""
-
-                        <p style="font-size:14px;">SnowGov is a powerful Snowflake Native App designed to simplify the management and governance of your Snowflake environment. You need SnowGov to efficiently configure accounts, create projects and environments, manage users, and monitor costs in your Snowflake setup.</p>""", unsafe_allow_html=True)
-
-        with st.expander("**How can I configure my organization and account parameters with SnowGov?**",expanded=False):
-
-            st.markdown("""
-
-                        <p style="font-size:14px;">SnowGov provides an intuitive user interface for your IT team to easily configure organization and account parameters, ensuring you have full control over your Snowflake resources.</p>""", unsafe_allow_html=True)
-
-        with st.expander("**Can I create logical entities like projects and environments with SnowGov?**",expanded=False):
-
-            st.markdown('''<p style="font-size:14px;">Yes, SnowGov allows you to create projects and multiple environments within them, such as Development, Staging, and Production. It also dynamically generates databases or schemas based on your configurations.</p>''', unsafe_allow_html=True)
-
-        with st.expander('**How do I manage warehouses for my projects and environments using SnowGov?**',expanded=False):
-
-            st.markdown('''<p style="font-size:14px;">SnowGov offers a user-friendly GUI to create and manage warehouses for each project and environment, simplifying Snowflake resource allocation.</p>''', unsafe_allow_html=True)
-
-        with st.expander("**How can I onboard users to projects and assign roles within each environment?**",expanded=False):
-
-            st.markdown('''<p style="font-size:14px;">SnowGov streamlines user onboarding and role assignment, ensuring that users have the right access permissions within databases or schemas.</p>''', unsafe_allow_html=True)
-
-        with st.expander('**Can I monitor Snowflake costs with SnowGov?**',expanded=False):
-
-            st.markdown('''<p style="font-size:14px;">Yes, SnowGov provides cost-monitoring dashboards that allow you to track costs by accounts, projects, environments, and users, helping you optimize your Snowflake spending.</p>''', unsafe_allow_html=True)
 def Menu_navigator():
     with st.sidebar:
         choice = option_menu(
            menu_title="MENU",
             options=["USER","DATABASE" ,"ROLE", "MONITOR","ABOUT"],
             icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
-            menu_icon="menu-button-wide-fill",
+            menu_icon="snow2",
     styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-size": "15px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-family":"","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
              }
         )
