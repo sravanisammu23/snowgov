@@ -14,7 +14,7 @@ from PIL import Image
 import altair as alt
 import base64
 import plotly.express as px
-image = Image.open('C:\\Users\\sravani.sammu\\Downloads\\image.png')
+image = Image.open('image.png')
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
