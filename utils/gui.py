@@ -62,7 +62,6 @@ def dataframe_with_podium(
     sorted_df.index = new_index[: len(sorted_df)]
     return sorted_df
 
-
 def date_selector() -> Tuple[datetime.date, datetime.date]:
     """Adds a date selector with a few different options."""
 
@@ -80,19 +79,22 @@ def date_selector() -> Tuple[datetime.date, datetime.date]:
     else:
         index = 0
 
-    date_range = st.selectbox(
-        "Date range",
-        options=[
-            "Last 7 days",
-            "Last 28 days",
-            "Last 3 months",
-            "Last 6 months",
-            "Last 12 months",
-            "All time"
-        ],
-        index=index,
-        key="date_range",
-    )
+    col1, col2 = st.beta_columns([0.5, 0.5])  # Use the first column (half-width) for the selectbox
+
+    with col1:
+        date_range = st.selectbox(
+            "Date range",
+            options=[
+                "Last 7 days",
+                "Last 28 days",
+                "Last 3 months",
+                "Last 6 months",
+                "Last 12 months",
+                "All time"
+            ],
+            index=index,
+            key="date_range",
+        )
 
     if date_range != "Custom":
         date_to = datetime.date.today()
@@ -109,10 +111,10 @@ def date_selector() -> Tuple[datetime.date, datetime.date]:
         else:
             date_from = datetime.date(year=2016, month=1, day=1)
 
-    
     st.caption(f"Your selection is from **{date_from}** to **{date_to}**")
 
     return date_from, date_to
+
 
 
 def pretty_print_credits(credits: float) -> str:
