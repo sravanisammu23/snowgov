@@ -1332,7 +1332,7 @@ def monitor2(tab_id):
         queries_data.WAREHOUSE_NAME.eq(selected_warehouse)
     ]
     gui.subsubheader(
-        "Histogram of **queries duration** (in secs)", "Log scale"
+        "Histogram of **queries duration** (in secs)"
     )
     # Histogram
     histogram = charts.get_histogram_chart(
