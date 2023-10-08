@@ -1671,7 +1671,7 @@ def customize_footer():
 
 
 def main():
-	 st.markdown("""
+	st.markdown("""
         <style>
             .stApp {
                 margin-left: 0!important;
@@ -1679,16 +1679,16 @@ def main():
             }
         </style>
     """, unsafe_allow_html=True)
-    custom_css = get_custom_css()
-    st.markdown(custom_css, unsafe_allow_html=True)
-    st.markdown("<style>body {background-color: #3498DB;}</style>", unsafe_allow_html=True)
-    st.markdown("<style>.stButton>button {background-color: #2980B9;font-family:Poppins; color: white;}</style>", unsafe_allow_html=True)
-    if "conn" not in st.session_state:
-        st.session_state.conn = None
-    if "connections" not in st.session_state:
-        st.session_state.connections = {}
-    Menu_navigator()
-if __name__ == "__main__":
-    main()
+	custom_css = get_custom_css()
+	st.markdown(custom_css, unsafe_allow_html=True)
+	    st.markdown("<style>body {background-color: #3498DB;}</style>", unsafe_allow_html=True)
+	    st.markdown("<style>.stButton>button {background-color: #2980B9;font-family:Poppins; color: white;}</style>", unsafe_allow_html=True)
+	    if "conn" not in st.session_state:
+	        st.session_state.conn = None
+	    if "connections" not in st.session_state:
+	        st.session_state.connections = {}
+	    Menu_navigator()
+	if __name__ == "__main__":
+	    main()
     customize_footer()
 
