@@ -1671,6 +1671,14 @@ def customize_footer():
 
 
 def main():
+	 st.markdown("""
+        <style>
+            .stApp {
+                margin-left: 0!important;
+                padding-left: 0!important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
     custom_css = get_custom_css()
     st.markdown(custom_css, unsafe_allow_html=True)
     st.markdown("<style>body {background-color: #3498DB;}</style>", unsafe_allow_html=True)
