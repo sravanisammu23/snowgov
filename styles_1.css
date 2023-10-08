@@ -1,0 +1,150 @@
+
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+        * {
+            font-family: Poppins!important;
+            font-weight: 400;
+        }
+
+        #app {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 15px;
+            text-align: left;
+            --hover-color: #eee;
+            background-color: #6D7294;
+        }
+
+        element.style {
+            color:#1D4077;
+        }
+
+        .css-75mose {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 12px;
+            --hover-color: #eee;
+        }
+
+        .css-uf99v8 {
+            align-items: flex-start !important;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #FFF -4.75%, rgba(255, 255, 255, 0.00) 78%);
+            justify-content: start !important;
+            padding: 10px 30px;
+            font-family: Poppins !important;
+            font-weight: 400;
+        }
+
+        .css-1y4p8pa {
+            padding: 0px 20px;
+            font-family: Poppins !important;
+            font-weight: 400;
+        }
+
+        .css-16i25t9 {
+            font-weight: 400;
+            font-size: 14px;
+            font-family: Poppins !important;
+        }
+
+        .stButton>button {
+            background-color: #2980B9;
+            font-family: Poppins !important;
+            color: white;
+            display: inline-flex;
+            padding: 10px 30px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50px;
+            font-weight: 400;
+            background: linear-gradient(to right, rgb(160, 42, 65) 0%, rgb(29, 64, 119) 100%);
+        }
+
+        .stButton {
+            width: unset!important;
+            font-weight: 400;
+        }
+
+        .css-k008qs {
+            justify-content: center;
+            font-family: Poppins !important;
+            font-weight: 400;
+        }
+
+        .icon bi-person-fill-add {
+            font-family: Poppins !important;
+            font-weight: 400;
+        }
+
+        .menu-title[data-v-4323f8ce], .menu .nav-item[data-v-4323f8ce], .menu .nav-link[data-v-4323f8ce], hr[data-v-4323f8ce] {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 14px;
+            border-radius: 12px;
+        }
+
+        .menu .nav-item .nav-link.active[data-v-4323f8ce] {
+            font-family: Poppins !important;
+            font-weight: 400;
+        }
+
+        .menu-title[data-v-4323f8ce] {
+            font-family: Poppins !important;
+        }
+
+        .menu .nav-link[data-v-4323f8ce] {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 18px;
+            border-radius: 12px;
+            background-color: #6D7294;
+            --hover-color: #eee;
+        }
+
+        .nav-link.active[data-v-4323f8ce] {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 18px;
+            border-radius: 12px;
+            background-color: #6D7294;
+            --hover-color: #eee;
+        }
+
+        .nav-link.active+.icon[data-v-4323f8ce], .nav-link.active[data-v-4323f8ce] {
+            background-color: #6D7294;
+        }
+
+        .css-dczs0m {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 14px;
+            border-radius: 12px;
+            background-color: #6D7294;
+            --hover-color: #eee;
+        }
+
+        .css-bdefqh p {
+            color: #A7ABC6;
+        }
+
+        .menu .container-xxl[data-v-4323f8ce] {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 18px;
+            border-radius: 12px;
+        }
+
+        .menu .nav-link[data-v-5af006b8] {
+            font-family: Poppins !important;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .menu .nav-item .nav-link.active[data-v-5af006b8] {
+            background-color: #6D7294;
+        }
+
+
+
