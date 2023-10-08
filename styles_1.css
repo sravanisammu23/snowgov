@@ -1,7 +1,6 @@
 
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
         * {
             font-family: Poppins!important;
             font-weight: 400;
@@ -145,6 +144,15 @@
         .menu .nav-item .nav-link.active[data-v-5af006b8] {
             background-color: #6D7294;
         }
+
+        .st-emotion-cache-1cx18u6{
+            padding: 0px 20px;
+            font-family: Poppins !important;
+            font-weight: 400;
+                
+        }
+
+
 
 
     
