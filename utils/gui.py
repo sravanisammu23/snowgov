@@ -79,7 +79,7 @@ def date_selector() -> Tuple[datetime.date, datetime.date]:
     else:
         index = 0
 
-    col1, col2 = st.beta_columns([0.5, 0.5])  # Use the first column (half-width) for the selectbox
+    col1, col2 = st.columns([0.5, 0.5])  # Use the first column (half-width) for the selectbox
 
     with col1:
         date_range = st.selectbox(
