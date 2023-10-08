@@ -14,13 +14,7 @@ from PIL import Image
 import base64
 import plotly.express as px
 image = Image.open('image_1.png')
-st.markdown("""
-    <style>
-        .stApp {
-            transform: translate(50%);
-        }
-    </style>
-    """, unsafe_allow_html=True)
+
 def get_custom_css():
 
     return """ <style>
