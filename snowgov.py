@@ -18,7 +18,7 @@ st.markdown("""
     <style>
         .main .block-container {
 	
-	    margin-top:  -18rem;
+	    margin-top:  0rem;
             margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
         }
     </style>
