@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('SnowGov.png')
+image = Image.open('image_1.png')
 def get_custom_css():
 
     return """ <style>
