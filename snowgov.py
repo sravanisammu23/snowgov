@@ -1021,13 +1021,19 @@ def monitor3(tab_id):
     if not warehouse_credits:
         st.warning("No data available for the selected filters.")
     else:
-        df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
-        df_credits = df_credits.sort_values(by='Credits', ascending=False)  # Sort in descending order by credits
-        top_5_warehouses = df_credits.head(5)  # Select the top 5 warehouses (top 5 in descending order)
-        # Creating a pie chart for the top 5 warehouses by credits
-        fig = px.pie(top_5_warehouses, names='Warehouse', values='Credits', title='Top 5 Warehouses by Credits(percentage)')
-        # Displaying the pie chart
-        st.plotly_chart(fig)
+	    df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
+	    df_credits = df_credits.sort_values(by='Credits', ascending=False)  # Sort in descending order by credits
+	    top_5_warehouses = df_credits.head(5)  # Select the top 5 warehouses (top 5 in descending order)
+	
+	    # Display the title using Streamlit
+	    st.write("**Top 5 Warehouses by Credits(percentage)**")
+	    gui.space()  # Adding custom space using your utility function
+	
+	    # Creating a pie chart for the top 5 warehouses by credits without the title
+	    fig = px.pie(top_5_warehouses, names='Warehouse', values='Credits')
+	
+	    # Displaying the pie chart
+	    st.plotly_chart(fig)
     # Hourly Credits
     if 'All' in selected_environments:
         display_hourly_credits_chart(conn, environments[1:], start_date)  # Exclude 'All' from selected environments
