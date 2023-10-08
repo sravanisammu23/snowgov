@@ -149,6 +149,7 @@
             padding: 0px 30px;
             font-family: Poppins !important;
             font-weight: 400;
+            flex-direction : column;
                 
         }
 
