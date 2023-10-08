@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import plost
 from datetime import datetime, timedelta
-#from utils import snowflake_connector as sf
-#from utils import sql as sql
-#from utils import charts,processing,gui
+from utils import snowflake_connector as sf
+from utils import sql as sql
+from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('image_1.png')
+image = Image.open('SnowGov.png')
 def get_custom_css():
 
     return """ <style>
@@ -120,6 +120,20 @@ def create_schema(conn, environment, team_name, sub_team_name, schema_name, powe
         result_messages.append(f"Error creating schema: {e}")
         cursor.close()
         return "\n".join(result_messages)
+def fetch_environments_from_db(conn):
+    cursor = conn.cursor()
+    cursor.execute("select TEAM_NAME from BILLING_USAGE.DASHBOARD.TEAM")
+    environments = [row[0] for row in cursor.fetchall()]
+    cursor.close()
+    return environments
+def fetch_sub_teams_from_db(conn):
+    cursor = conn.cursor()
+    cursor.execute("USE ROLE ACCOUNTADMIN")
+    cursor.execute("select distinct(SUB_TEAM_NAME) from BILLING_USAGE.DASHBOARD.SUB_TEAM")
+    sub_teams = [row[0] for row in cursor.fetchall()]
+    cursor.close()
+    return sub_teams
+
 def database_management():
     # Custom CSS to style the various elements
     st.markdown("""
@@ -131,36 +145,28 @@ def database_management():
 
                     .stTabs [data-baseweb="tab"] {
                     font-family: 'Poppins' !important;
-}
-
+                    }
 
                     /* Styles for widget labels and reducing the gap */
                     .stMarkdown p {
                         color: black !important;
                         font-family: Poppins;
-                        margin-bottom: -1rem !important;   # Reducing the space after the markdown labels
+                        margin-bottom: -1rem !important;
                     }
 
                     .stTextInput > div,
                     .stRadio > div,
                     .stSelectbox > div {
-                        margin-top: -1rem !important;     # Reducing the space before the widgets
+                        margin-top: -1rem !important;
                     }
 
                 </style>""", unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1,20])
-
-    with col1:
-        im = Image.open("Project-Title.png")
-        st.image(im, width=24)
-
-    with col2:
-        st.markdown("<p style='color: #1D4077;font-family: Poppins;font-size: 18px;font-style: normal;font-weight: 600;line-height: normal;'>Project Space</p>", unsafe_allow_html=True)
-
-    # Tabs with Poppins font applied
-    tab1, tab2 = st.tabs(["**Database**", "**Schema**"])
     conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+    available_teams = fetch_environments_from_db(conn)
+    available_sub_teams = fetch_sub_teams_from_db(conn)
+
+    tab1, tab2 = st.tabs(["**Database**", "**Schema**"])
 
     with tab1:
         with st.form(key='my_form2'):
@@ -168,19 +174,20 @@ def database_management():
             environment = st.radio('', ['DEV', 'PROD', 'STAGE', 'TEST'])
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Business Unit :</p>", unsafe_allow_html=True)
-            db_team_name = st.text_input('', key="db_team_name_input")
+            db_team_name = st.selectbox('', available_teams)
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Project :</p>", unsafe_allow_html=True)
             db_sub_team_name = st.text_input('', key="db_sub_team_name_input")
 
-            st.session_state.environment = environment
-            st.session_state.db_team_name = db_team_name
-            st.session_state.db_sub_team_name = db_sub_team_name
-            submit_button = st.form_submit_button(label='Setup')
-        if submit_button:
-            set_role(conn, "ACCOUNTADMIN")
-            message = create_database_and_schema(conn, environment, db_team_name, db_sub_team_name)
-            st.write(message)
+            submit_button_db = st.form_submit_button(label='Setup Database')
+
+        if submit_button_db:
+            if not environment or not db_team_name or not db_sub_team_name.strip():
+                st.write("Please fill in all required fields for the Database setup.")
+            else:
+                set_role(conn, "ACCOUNTADMIN")
+                message = create_database_and_schema(conn, environment, db_team_name, db_sub_team_name)
+                st.write(message)
 
     with tab2:
         with st.form(key='my_form3'):
@@ -188,40 +195,36 @@ def database_management():
             schema_name = st.text_input("", key="schema_name_input")
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Environment :</p>", unsafe_allow_html=True)
-            schema_env = st.text_input("", st.session_state.get('environment', ''), key="schema_env_input")
+            schema_env = st.selectbox('', ['DEV', 'PROD', 'STAGE', 'TEST'])
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Business Unit :</p>", unsafe_allow_html=True)
-            schema_team_name = st.text_input('', st.session_state.get('db_team_name', ''), key="schema_team_name_input")
+            schema_team_name = st.selectbox('', available_teams)
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Project :</p>", unsafe_allow_html=True)
-            schema_sub_team_name = st.text_input('', st.session_state.get('db_sub_team_name', ''), key="schema_sub_team_name_input")
+            schema_sub_team_name = st.selectbox('', available_sub_teams)
 
             with st.expander("Privilege Assignment"):
                 privilege_options = ["Read Only", "Read/Write", "Full Access"]
-
-                # Power User
                 power_user_placeholder = st.empty()
                 power_user_privilege = st.selectbox("", privilege_options, index=2)
                 power_user_placeholder.markdown("<p style='font-family: Poppins; color: black;'>Power User</p>", unsafe_allow_html=True)
-
-                # Analyst
                 analyst_placeholder = st.empty()
                 analyst_privilege = st.selectbox("", privilege_options, index=1)
                 analyst_placeholder.markdown("<p style='font-family: Poppins; color: black;'>Analyst</p>", unsafe_allow_html=True)
-
-                # Data Engineer
                 data_engineer_placeholder = st.empty()
                 data_engineer_privilege = st.selectbox("", privilege_options, index=0)
                 data_engineer_placeholder.markdown("<p style='font-family: Poppins; color: black;'>Data Engineer</p>", unsafe_allow_html=True)
 
-                if power_user_privilege == "Read Only" and analyst_privilege == "Full Access":
-                    st.write("Invalid combination: POWER USER cannot have lower privileges than ANALYST.")
+            submit_button_schema = st.form_submit_button(label='Create Schema')
 
-            submit_button = st.form_submit_button(label='Create')
-        if submit_button:
-            set_role(conn, "ACCOUNTADMIN")
-            message = create_schema(conn, schema_env, schema_team_name, schema_sub_team_name, schema_name, power_user_privilege, analyst_privilege, data_engineer_privilege)
-            st.write(message)
+        if submit_button_schema:
+            if not schema_name.strip() or not schema_env or not schema_team_name or not schema_sub_team_name:
+                st.write("Please fill in all required fields for the Schema setup.")
+            else:
+                set_role(conn, "ACCOUNTADMIN")
+                message = create_schema(conn, schema_env, schema_team_name, schema_sub_team_name, schema_name, power_user_privilege, analyst_privilege, data_engineer_privilege)
+                st.write(message)
+
 
 
 
@@ -280,9 +283,12 @@ def user_creation_page():
         submit_button = st.form_submit_button(label='Create')
 
     if submit_button:
-        result = create_snowflake_user(user_name, l_name, f_name, email)
-        st.write(result)  # This will display "User already exists!" if the user already exists
-
+        # Check if any of the fields are empty
+        if not user_name or not f_name or not l_name or not email:
+            st.write("Please enter a value for all required fields.")
+        else:
+            result = create_snowflake_user(user_name, l_name, f_name, email)
+            st.write(result) # This will display "User already exists!" if the user already exists
 
 
 # user_creation_page()
@@ -366,45 +372,74 @@ def revoke_roles_and_log_using_sp3(username, roles_to_revoke):
     return result[0]
 
 def revoke_role():
+    # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+    result_message = None
+
+    # Create columns layout
+    col1, col2, col3 = st.columns([33, 33, 34])
+
+    # Fetch users and display the user selectbox
     users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
-    con.close()
-    selected_user = st.selectbox('Select User', users,key='u1')
+    with col1:
+        st.markdown("""
+    <style>
+    .stSelectbox:first-of-type > div[data-baseweb="select"] > div {
+              padding: 5px;
+                width : 100%;
+    }
+                .stSelectbox>label {
+                    width:400%;
+                color: #A7ABC6;
+font-family: Poppins;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+        selected_user = st.selectbox('Select User', users, key='u1')
+
     roles_table_data = fetch_roles_for_user3(selected_user)
 
-    if not roles_table_data:
-        st.warning(f'No roles assigned to {selected_user} yet.')
+    # Display assigned roles in a table without index
+    role_df = pd.DataFrame(roles_table_data)
+    st.dataframe(role_df)
 
-    else:
-        with st.expander("Roles already assigned"):
-
-            st.table(roles_table_data)
-
-    st.markdown("""
+    # Display the roles to revoke multiselect widget
+    with col2:
+        st.markdown("""
     <style>
         .stMultiSelect [data-baseweb=select] span{
             padding: 5px;
-            width : 50%;
+            width : 100%;
             max-width: 250px;
             font-size: 0.6rem;
         }
                         .stMultiSelect>label {
                 color: #CBCACA;
               padding: 5px;
-                width : 50%;
+                width : 100%;
     }
     </style>
     """, unsafe_allow_html=True)
+        roles_to_revoke = st.multiselect('Select Roles to Revoke', [row['Role Name'] for row in roles_table_data])
 
-    roles_to_revoke = st.multiselect('Select Roles to Revoke', [row['Role Name'] for row in roles_table_data])
+    # Revoke roles button
+    with col3:
+        st.markdown(get_css_for_button(), unsafe_allow_html=True)
+        if st.button('Revoke Roles'):
+            if not roles_to_revoke:
+                st.warning('**Please select roles to revoke.**')
+            else:
+                result_message = revoke_roles_and_log_using_sp3(selected_user, roles_to_revoke)
 
-    if st.button('Revoke Roles'):
-        if not roles_to_revoke:
-            st.warning('Please select roles to revoke.')
-        else:
-            result_message = revoke_roles_and_log_using_sp3(selected_user, roles_to_revoke)
+    if result_message:
+        st.write(result_message)
 
-            st.write(result_message)
+    con.close()
+
 
 
 def connect_to_snowflake2():
@@ -672,22 +707,46 @@ def get_css_for_button():
 }
 </style>"""
 def monitor():
-    dont_choose = option_menu(
-        menu_title="Credits Usage",
-        options=["Account Usage", "Detail Metrics"],
-        icons=["display-fill", "display-fill"],
-        menu_icon='coin',
-        orientation="horizontal",
-         styles={
-        "container": {"padding": "0!important","font-family": "Poppins", "background-color": "#fafafa"},
-        "nav-link": {"font-size": "15px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins",},
-    }
-    )
-    if dont_choose == "Account Usage":
-        monitor2()
-    elif dont_choose == "Detail Metrics":
-        monitor3()
+    col1, col2 = st.columns([1,20])
+
+    with col1:
+        im = Image.open("Monitor-Title.png")
+        st.image(im, width=24)
+
+    with col2:
+        st.markdown("<p style='color: #1D4077;font-family: Poppins;font-size: 18px;font-style: normal;font-weight: 600;line-height: normal;'>Credits Usage</p>", unsafe_allow_html=True)
+
+    st.markdown("""
+    <style>
+        /* Styles for the tabs */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 20px;
+        }
+
+        .stTabs [data-baseweb="tab"] {
+            color: grey;
+            font-family: Poppins;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        .stTabs [aria-selected="true"] {
+            color: red;
+            background-color: #FFFFFF;
+        }
+    </style>""", unsafe_allow_html=True)
+
+    # Tabs for "Account Usage" and "Detail Metrics"
+    tab1, tab2 = st.tabs(["**Account Usage**", "**Detail Metrics**"])
+
+    with tab1:
+        monitor2(1)  # Passing 1 as the tab_id
+
+    with tab2:
+        monitor3(2)  # Passing 2 as the tab_id
+
 def execute_query(conn, query):
     cur = conn.cursor()
     try:
@@ -853,47 +912,108 @@ def display_bar_graph(data):
             title='Average Execution Time by Query Type and Warehouse Size'
         )
         st.plotly_chart(fig)
-def monitor3():
+
+def monitor3(tab_id):
 
     conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+
     custom_css = get_custom_css()
+
     st.markdown(custom_css, unsafe_allow_html=True)
-    st.sidebar.header("Filters")
+
+
+
+    # Create columns for filters
+
+    col_date, col_env, col_bu, col_proj = st.columns([4.5, 4.5, 4.5, 4.5])
+
+
+
     # Date Range Filter
-    date_option = st.sidebar.selectbox('Select Date Range', ['1 day', '7 days', '28 days', '1 year'])
-    if date_option == '1 day':
-        start_date = datetime.now() - timedelta(days=1)
-    elif date_option == '7 days':
-        start_date = datetime.now() - timedelta(days=7)
-    elif date_option == '28 days':
-        start_date = datetime.now() - timedelta(days=28)
-    else:  # 1 year
-       start_date = datetime.now() - timedelta(days=365)
-    end_date = datetime.now()
+
+    with col_date:
+
+        date_option = st.selectbox('Select Date Range', ['1 day', '7 days', '28 days', '1 year'])
+
+        if date_option == '1 day':
+
+            start_date = datetime.now() - timedelta(days=1)
+
+        elif date_option == '7 days':
+
+            start_date = datetime.now() - timedelta(days=7)
+
+        elif date_option == '28 days':
+
+            start_date = datetime.now() - timedelta(days=28)
+
+        else:  # 1 year
+
+            start_date = datetime.now() - timedelta(days=365)
+
+        end_date = datetime.now()
+
+
+
     # Environment Filter
-    environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
-    selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
-    if not selected_environments:
-        st.warning("Please select at least one option for the Environment filter.")
-        return
-    if selected_environments:
-        projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
-        selected_projects = st.sidebar.multiselect('BUSINESS UNIT :', projects, default=['All'])
-    # Subject Area Filter
-        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
-        selected_subject_areas = st.sidebar.multiselect('PROJECT :', subject_areas, default=['All'])
-        # Constructing Query based on Graph Option
-        query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
-        warehouse_credits = execute_query(conn, query_credits)
-        if not warehouse_credits:
-            st.warning("No data available for the selected filters.")
+
+    with col_env:
+
+        environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
+
+        selected_environments = st.multiselect('ENVIRONMENT :', environments, default=['All'])
+
+
+
+    # Business Unit Filter
+
+    with col_bu:
+
+        if selected_environments:
+
+            projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
+
+            selected_projects = st.multiselect('BUSINESS UNIT :', projects, default=['All'])
+
         else:
-            df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
-            df_credits = df_credits.sort_values(by='Credits', ascending=True)  # Sort in ascending order by credits
-            top_5_warehouses = df_credits.tail(5)  # Select the last 5 warehouses (top 5 in ascending order)
-            fig = px.bar(top_5_warehouses, y='Warehouse', x='Credits', title='Top 5 Warehouses by Credits', orientation='h')
-            fig.update_yaxes(tickformat=".15f")
-            st.plotly_chart(fig)
+
+            selected_projects = ['All']
+
+
+
+    # Subject Area Filter
+
+    with col_proj:
+
+        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
+
+        selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
+
+
+
+    # Constructing Query based on Graph Option
+
+    query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
+
+    warehouse_credits = execute_query(conn, query_credits)
+
+    if not warehouse_credits:
+
+        st.warning("No data available for the selected filters.")
+
+    else:
+
+        df_credits = pd.DataFrame(warehouse_credits, columns=['Warehouse', 'Credits'])
+
+        df_credits = df_credits.sort_values(by='Credits', ascending=True)  # Sort in ascending order by credits
+
+        top_5_warehouses = df_credits.tail(5)  # Select the last 5 warehouses (top 5 in ascending order)
+
+        fig = px.bar(top_5_warehouses, y='Warehouse', x='Credits', title='Top 5 Warehouses by Credits', orientation='h')
+
+        fig.update_yaxes(tickformat=".15f")
+
+        st.plotly_chart(fig)
 # ...
     # Existing logic to construct the query and execute it
     query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
@@ -1073,13 +1193,17 @@ def monitor3():
     # Call the function to display top 5 credits used by Cloud Services and Compute by Warehouse
     display_top_5_credits_by_warehouse(conn, selected_environments)
     conn.close()
-def monitor2():
-    with st.sidebar:
+def monitor2(tab_id):
+    if tab_id == 1:  # Assuming 1 corresponds to "Account Usage"
         date_from, date_to = gui.date_selector()
-    conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
-    #conn.cursor().execute(query)
-    gui.space(1)
-    st.subheader("WAREHOUSE METERING")
+
+        conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+        #conn.cursor().execute(query)
+        gui.space(1)
+        st.subheader("WAREHOUSE METERING - Account Usage")
+    elif tab_id == 2:  # Assuming 2 corresponds to some other tab
+        # Render content specific to the other tab
+        st.subheader("WAREHOUSE METERING - Other Tab Name")
     query = sql.CONSUMPTION_PER_SERVICE_TYPE_QUERY
     df = sf.sql_to_dataframe(
         query.format(date_from=date_from, date_to=date_to)
@@ -1433,11 +1557,7 @@ def about():
         menu_title =None,
         options=["SNOWGOV"],
         icons = ["snow2"],
-        styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
-             }
+
     )
     if des1 == "SNOWGOV":
         with st.expander('**Description**', expanded=False):
@@ -1456,11 +1576,7 @@ def about():
         menu_title =None,
         options=["FAQ's"],
         icons =["bookmarks-fill"],
-        styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
-             }
+
     )
     if faq == "FAQ's":
         with st.expander("**What is SnowGov, and why do I need it?**",expanded=False):
@@ -1484,11 +1600,7 @@ def Menu_navigator():
             options=["User","Database" ,"Role", "Monitor","About"],
             icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
             menu_icon="menu-button-wide-fill",
-    styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
-        "nav-link": {"font-size": "15px", "text-align": "left","font-family": "Poppins", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
-             }
+
         )
     pages = {
         "User Creation": user_creation_page,
@@ -1497,7 +1609,11 @@ def Menu_navigator():
         "Monitor" : monitor,
         "About"   : about
     }
-    current_page = st.session_state.get("current_page", "User Creation")
+    styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa"},
+        "nav-link": {"font-family":"","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#0096FF"},
+      }
     if choice == 'Database':
         current_page = "Database Management"
     elif choice == 'User':
@@ -1514,6 +1630,35 @@ def Menu_navigator():
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
 # Main function with CSS applied at the beginning
 
+def customize_footer():
+    st.markdown("""
+        <style>
+            /* Hide default footer */
+            .reportview-container .main footer {visibility: hidden;}
+
+            /* Add a new footer */
+            .footer:after {
+                content:'Powered by Anblicks';
+                visibility: visible;
+                display: block;
+                position: absolute; /* Use absolute positioning */
+                right: 10px; /* Position from the right */
+                bottom: 10px; /* Position from the bottom */
+                font-size: 1rem;
+                color: gray;
+                z-index: 1000;
+            }
+
+            /* Ensure the main content area is relatively positioned */
+            .reportview-container .main {
+                position: relative;
+            }
+        </style>
+        <div class="footer"></div>
+    """, unsafe_allow_html=True)
+
+
+
 
 
 def main():
@@ -1528,4 +1673,5 @@ def main():
     Menu_navigator()
 if __name__ == "__main__":
     main()
+    customize_footer()
 
