@@ -1387,7 +1387,6 @@ def monitor2(tab_id):
     gui.space(1)
     gui.subsubheader(
         "**Query VS Time Frequency**: longest and most frequent queries",
-        "Log scales (🖱️ hover for real values!)",
     )
     queries_agg = sf.sql_to_dataframe(
         sql.QUERIES_COUNT_QUERY.format(
