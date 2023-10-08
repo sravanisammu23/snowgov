@@ -198,7 +198,7 @@ def database_management():
             st.markdown("<p style='font-family: Poppins; color: black;'>Project :</p>", unsafe_allow_html=True)
             db_sub_team_name = st.text_input('', key="db_sub_team_name_input")
 
-            submit_button_db = st.form_submit_button(label='Setup Database')
+            submit_button_db = st.form_submit_button(label='Setup')
 
         if submit_button_db:
             if not environment or not db_team_name or not db_sub_team_name.strip():
@@ -448,7 +448,7 @@ line-height: normal;
     # Revoke roles button
     with col3:
         st.markdown(get_css_for_button(), unsafe_allow_html=True)
-        if st.button('Revoke Roles'):
+        if st.button('Revoke'):
             if not roles_to_revoke:
                 st.warning('**Please select roles to revoke.**')
             else:
