@@ -17,6 +17,8 @@ image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .main .block-container {
+	
+	    margin-top:  -18rem;
             margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
         }
     </style>
