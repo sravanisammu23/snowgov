@@ -1641,17 +1641,13 @@ def customize_footer():
                 content:'Powered by Anblicks';
                 visibility: visible;
                 display: block;
-                position: absolute; /* Use absolute positioning */
-                right: 10px; /* Position from the right */
-                bottom: 10px; /* Position from the bottom */
+                position: fixed;
+                /* Adjust to place it at the bottom right */
+                right: 2rem;
+                bottom: 10px;
                 font-size: 1rem;
                 color: gray;
                 z-index: 1000;
-            }
-
-            /* Ensure the main content area is relatively positioned */
-            .reportview-container .main {
-                position: relative;
             }
         </style>
         <div class="footer"></div>
