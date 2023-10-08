@@ -17,7 +17,7 @@ image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .stApp {
-            transform: translate(-20%);
+            transform: translate(20%);
         }
     </style>
     """, unsafe_allow_html=True)
