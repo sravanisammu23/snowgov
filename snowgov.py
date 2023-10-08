@@ -133,8 +133,16 @@ def fetch_sub_teams_from_db(conn):
     sub_teams = [row[0] for row in cursor.fetchall()]
     cursor.close()
     return sub_teams
-
 def database_management():
+    col1, col2 = st.columns([1,20])
+
+    with col1:
+        im = Image.open("Project-Title.png")
+        st.image(im, width=24)
+
+    with col2:
+        st.markdown("<p style='color: black;font-family: Poppins;font-size: 18px;font-style: normal;font-weight: 600;line-height: normal;'>Project Space</p>", unsafe_allow_html=True)
+
     # Custom CSS to style the various elements
     st.markdown("""
                 <style>
