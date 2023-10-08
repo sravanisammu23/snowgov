@@ -1667,7 +1667,7 @@ def customize_footer():
                 display: block;
                 position: fixed;
                 /* Adjust to place it at the bottom right */
-                right: 2rem;
+                right: 10rem;
                 bottom: 10px;
                 font-size: 1rem;
                 color: gray;
