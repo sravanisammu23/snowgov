@@ -19,7 +19,7 @@ st.markdown("""
         .main .block-container {
 	
 	    margin-top:  -10rem;
-            margin-left: -30rem;  /* Adjust this value as needed to reduce the gap */
+            margin-left: -25rem;  /* Adjust this value as needed to reduce the gap */
         }
     </style>
     """, unsafe_allow_html=True)
