@@ -48,11 +48,11 @@ st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=F
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
-    "account": "pr65711.ap-southeast-1",
-    "user": "snowgovernance",
-    "password": "Sravani@23",
+    "account": "fy50889.us-east4.gcp",
+    "user": "snowgov",
+    "password": "WelcomeToGCP23!",
     "role": "accountadmin",
-    "warehouse": "COMPUTE_WH",
+    "warehouse": "SNOWGOV_WAREHOUSE",
     "database": "UTIL_DB",
     "schema": "ADMIN_TOOLS"
 }
