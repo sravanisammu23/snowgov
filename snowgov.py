@@ -504,7 +504,7 @@ def fetch_users_for_role2(conn, role):
 
     try:
         cur = conn.cursor()
-        cur.execute(f"SELECT DISTINCT UserName FROM \"BILLING_USAGE\".\"DASHBOARD\".\"USER_ROLE_MAPPING\" WHERE ROLENAME= '{role}'")
+        cur.execute(f"SELECT DISTINCT UserName FROM \"BILLING_USAGE\".\"DASHBOARD\".\"RESULT_TABLE\" WHERE ROLENAME= '{role}'")
         users = [row[0] for row in cur.fetchall()]
         cur.close()
         return users
