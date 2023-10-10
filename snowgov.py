@@ -1565,7 +1565,7 @@ def about():
         icons = ["snow2"],
 	styles={
         "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
-        "nav-link": {"font-family":"poppins !important","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-family":"Poppins !important","font-size": "18px","text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
              }
 
@@ -1588,8 +1588,8 @@ def about():
         options=["FAQ's"],
         icons =["bookmarks-fill"],
 	styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "poppins"},
-        "nav-link": {"font-family":"poppins !important","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
+        "nav-link": {"font-family":"Poppins !important","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
              }
 
@@ -1619,12 +1619,12 @@ def Menu_navigator():
 	styles={
        
         "nav-link": {
-		"font-family":"poppins !important",
+		"font-family":"Poppins !important",
 		"text-align": "left", 
 		"--hover-color": "#eee",
 	        "margin":"0px",
                 "padding": "0px",
-                "font-size": "1rem",
+                "font-size": "16px",
                 "font-weight": 400,
        
       }
@@ -1666,6 +1666,8 @@ def customize_footer():
                 content:'Powered by Anblicks';
                 visibility: visible;
                 display: block;
+		font-style: Poppins;
+  		font-weight : 400;
                 position: fixed;
                 /* Adjust to place it at the bottom right */
                 right: 10rem;
