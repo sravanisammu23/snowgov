@@ -1544,8 +1544,8 @@ def monitor2(tab_id):
 def about():
     st.markdown("""
     <style>
-        body img[src="your_logo.png"] {
-            margin-left: -10px !important;
+        body img[src="SnowGov.png"] {
+            margin-left: 0px !important;
         }
     </style>
 """, unsafe_allow_html=True)
