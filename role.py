@@ -1621,15 +1621,13 @@ def Menu_navigator():
         "nav-link": {"font-family":"poppins !important","font-weight":400,"font-size": "18px", "text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
       }
-
-
-        )
-    pages = {
-        "User Creation": user_creation_page,
-        "Database Management": database_management,
-        "Role Management" : role_manage,
-        "Monitor" : monitor,
-        "About"   : about
+)
+    	pages = {
+		"User Creation": user_creation_page,
+        	"Database Management": database_management,
+       		 "Role Management" : role_manage,
+        	"Monitor" : monitor,
+        	"About"   : about
     }
     
     if choice == 'Database':
