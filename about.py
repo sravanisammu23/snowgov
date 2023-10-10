@@ -1557,8 +1557,14 @@ def about():
     des1=option_menu(
         menu_title =None,
         options=["SNOWGOV"],
+	styles={
+		"nav-link": {
+			"margin":"0px 0px 0rem",
+			"padding": "2px",
+			"font-size": "1rem",
+			"font-weight": 400,
 
-    )
+}}
     if des1 == "SNOWGOV":
             st.markdown("""
             <div style="font-size:14px;"font-family": "Poppins"">
