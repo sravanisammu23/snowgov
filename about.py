@@ -1557,13 +1557,14 @@ def monitor2(tab_id):
     """
  
 def about():
-    st.markdown("""
-        <style>
-            body img[src="SnowGov.png"] {
-                margin-left: -100000px !important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+	st.markdown("""
+	    <style>
+	        .element-container {
+	            margin-left: -10px !important;
+	        }
+	    </style>
+	""", unsafe_allow_html=True)
+
 
 
 # Displaying your logo
