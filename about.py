@@ -977,13 +977,11 @@ def monitor3(tab_id):
     # Environment Filter
 
     with col_env:
-
-
-    environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
-    selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
-    if not selected_environments:
-        st.warning("Please select at least one option for the Environment filter.")
-        return
+	    environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
+	    selected_environments = st.sidebar.multiselect('ENVIRONMENT :', environments, default=['All'])
+	    if not selected_environments:
+		    st.warning("Please select at least one option for the Environment filter.")
+		    return
 	    
 
 
