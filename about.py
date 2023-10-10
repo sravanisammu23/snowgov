@@ -1668,6 +1668,12 @@ def customize_footer():
                 color: gray;
                 z-index: 1000;
             }
+
+            /* Adjust the position of the menu */
+            .menu .container-xxl[data-v-5af006b8] {
+                margin-top: 0rem !important;
+                padding-top: 0rem !important;
+            }
         </style>
         <div class="footer"></div>
     """, unsafe_allow_html=True)
