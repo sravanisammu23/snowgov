@@ -390,7 +390,6 @@ def revoke_roles_and_log_using_sp3(username, roles_to_revoke):
     result = con.cursor().execute(call_sp_query).fetchone()
     con.close()
     return result[0]
-
 def revoke_role():
     # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
@@ -424,9 +423,11 @@ line-height: normal;
 
     roles_table_data = fetch_roles_for_user3(selected_user)
 
-    # Display assigned roles in a table without index
+    # Display assigned roles in a table with a specified width
     role_df = pd.DataFrame(roles_table_data)
-    st.dataframe(role_df)
+    
+    # Increase the width of the dataframe table
+    st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
 
     # Display the roles to revoke multiselect widget
     with col2:
@@ -620,9 +621,12 @@ def fetch_all_roles():
 def role_assignment():
     # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
-    result_message=None
+    result_message = None
 
-    col1, col2,col3 = st.columns([33,33,34])
+    # Create columns layout
+    col1, col2, col3 = st.columns([33, 33, 34])
+
+    # Fetch users and display the user selectbox
     users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
 
     with col1:
@@ -642,21 +646,21 @@ font-weight: 600;
 line-height: normal;
     }
     </style>
-""", unsafe_allow_html=True)
-
+    """, unsafe_allow_html=True)
         selected_user = st.selectbox('User', users)
 
         granted_roles_data = fetch_roles_for_user(selected_user)
 
-        granted_roles = [row['Role Name'] for row in granted_roles_data]
+        # Display granted roles in a table with a specified width
+        role_df = pd.DataFrame(granted_roles_data)
+        st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
 
     # Fetch all roles and filter out the roles already granted
     all_roles = fetch_all_roles()
-
-    roles_to_display = list(set(all_roles) - set(granted_roles))
+    roles_to_display = list(set(all_roles) - set([row['Role Name'] for row in granted_roles_data]))
 
     with col2:
-            st.markdown("""
+        st.markdown("""
     <style>
         .stMultiSelect [data-baseweb=select] span{
             padding: 5px;
@@ -671,44 +675,25 @@ line-height: normal;
     }
     </style>
     """, unsafe_allow_html=True)
-            roles_to_grant = st.multiselect('Roles', roles_to_display)
+        roles_to_grant = st.multiselect('Roles', roles_to_display)
 
-
-
+    # Assign roles button
     with col3:
         st.markdown(get_css_for_button(), unsafe_allow_html=True)
         if st.button('Assign'):
-            try:
-
-                if not roles_to_grant:
-                    st.warning('**Please select roles to grant.**')
-
-                else:
-
+            if not roles_to_grant:
+                st.warning('**Please select roles to grant.**')
+            else:
+                try:
                     result_message = grant_roles_and_log_using_sp(selected_user, roles_to_grant)
+                except:
+                    pass
 
-
-            except:
-                pass
-
-    df = pd.DataFrame.from_dict(granted_roles_data)
-
-    if not granted_roles_data:
-        st.warning(f'No roles assigned to {selected_user} yet.')
-
-    else:
-        st.markdown("""
-                <style>.stDataeditor>{
-                  background-color: 8017f5;
-                }
-                    </style>""",unsafe_allow_html=True)
-        edited_df = st.data_editor(
-     df,
-    hide_index=True,
-)
     if result_message:
         st.write(result_message)
+
     con.close()
+
 
 
 
