@@ -1653,7 +1653,7 @@ def customize_footer():
         <style>
             /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
             .st-emotion-cache-10oheav {
-                padding: 1.5rem 0 !important;
+                padding: 2rem 0 !important;
             }
 
             /* Hide default footer */
@@ -1674,9 +1674,15 @@ def customize_footer():
                 color: gray;
                 z-index: 1000;
             }
+
+            /* Decrease the padding for .menu .container-xxl to make it smaller */
+            .menu .container-xxl[data-v-5af006b8] {
+                padding: 1rem !important;
+            }
         </style>
         <div class="footer"></div>
     """, unsafe_allow_html=True)
+
 
 
 
