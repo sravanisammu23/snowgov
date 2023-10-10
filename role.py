@@ -651,9 +651,11 @@ line-height: normal;
 
         granted_roles_data = fetch_roles_for_user(selected_user)
 
-        # Display granted roles in a table with a specified width
-        role_df = pd.DataFrame(granted_roles_data)
-        st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
+    # Display granted roles in a table with a specified width
+    role_df = pd.DataFrame(granted_roles_data)
+    
+    # Increase the width of the dataframe table
+    st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
 
     # Fetch all roles and filter out the roles already granted
     all_roles = fetch_all_roles()
