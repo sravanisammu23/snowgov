@@ -48,6 +48,7 @@ st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=F
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 
+
 SNOWFLAKE_CONFIG = {
     "account": "anblicksorg_aws.us-east-1",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
     "user": "snowgov",#snowgov
@@ -390,7 +391,6 @@ def revoke_roles_and_log_using_sp3(username, roles_to_revoke):
     result = con.cursor().execute(call_sp_query).fetchone()
     con.close()
     return result[0]
-
 def revoke_role():
     # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
@@ -462,6 +462,7 @@ line-height: normal;
         st.write(result_message)
 
     con.close()
+
 
 
 def connect_to_snowflake2():
@@ -616,8 +617,6 @@ def fetch_all_roles():
     con.close()
     return all_roles
 
-
-
 def role_assignment():
     # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
@@ -695,6 +694,9 @@ line-height: normal;
         st.write(result_message)
 
     con.close()
+
+
+
 
 
 def get_css_for_button():
@@ -1541,19 +1543,17 @@ def monitor2(tab_id):
     """
  
 def about():
-    # Create an expander for the about section
-    des1=option_menu(
-        menu_title =None,
-        options=["SNOWGOV"],
-	styles={
-		"nav-link": {
-			"margin":"0px 0px 0rem",
-			"padding": "2px",
-			"font-size": "1rem",
-			"font-weight": 400,
+    st.markdown("""
+    <style>
+        body img[src="your_logo.png"] {
+            margin-left: -10px !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-}}
-    )
+
+    st.image("SnowGov.png",width=150)
+    des1="SNOWGOV"
     if des1 == "SNOWGOV":
             st.markdown("""
             <div style="font-size:12px;"font-family": " !important"">
@@ -1566,21 +1566,7 @@ def about():
                 </ul>
             </div>
             """, unsafe_allow_html=True)
-    faq=option_menu(
-        menu_title =None,
-        options=["FAQ's"],
-        icons =["bookmarks-fill"],
-	styles={
-		"nav-link": {
-			"margin":"0px 0px 1rem",
-			"padding": "2px",
-			"font-size": "1rem",
-			"font-weight": 400,
-
-}
-	}
-
-    )
+    faq="FAQ's"
     if faq == "FAQ's":
         with st.expander("**What is SnowGov, and why do I need it?**",expanded=False):
             st.markdown("""
@@ -1632,16 +1618,22 @@ def Menu_navigator():
     pages[current_page]()
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
 # Main function with CSS applied at the beginning
-
 def customize_footer():
     st.markdown("""
         <style>
+            /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
+            .st-emotion-cache-10oheav {
+                padding: 2rem 1rem;
+            }
+
             /* Hide default footer */
-            .reportview-container .main footer {visibility: hidden;}
+            .reportview-container .main footer {
+                visibility: hidden;
+            }
 
             /* Add a new footer */
             .footer:after {
-                content:'Powered by Anblicks';
+                content: 'Powered by Anblicks';
                 visibility: visible;
                 display: block;
                 position: fixed;
@@ -1651,6 +1643,13 @@ def customize_footer():
                 font-size: 1rem;
                 color: gray;
                 z-index: 1000;
+            }
+
+            /* Decrease the padding for .menu .container-xxl to make it smaller */
+            .menu .container-xxl[data-v-5af006b8] {
+                padding: 1rem !important;
+                margin: 0rem !important; /* Set margin to 0 */
+                border: none !important; /* Remove border */
             }
         </style>
         <div class="footer"></div>
