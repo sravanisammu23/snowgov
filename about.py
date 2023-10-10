@@ -622,7 +622,7 @@ def role_assignment():
     result_message=None
 
     col1, col2,col3 = st.columns([33,33,34])
-    users = [row[0] for row in con.cursor().execute('SELECT DISTINCT USERNAME FROM BILLING_USAGE.DASHBOARD.RESULT_TABLE;').fetchall()]
+    users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
 
     with col1:
         st.markdown("""
