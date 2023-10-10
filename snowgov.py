@@ -1626,7 +1626,7 @@ def Menu_navigator():
     }
     styles={
         "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-family":"","font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#0096FF"},
       }
     if choice == 'Database':
