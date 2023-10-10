@@ -706,6 +706,7 @@ line-height: normal;
         edited_df = st.data_editor(
      df,
     hide_index=True,
+    use_container_width=False
 )
     if result_message:
         st.write(result_message)
