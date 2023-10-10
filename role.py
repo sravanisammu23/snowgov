@@ -1565,9 +1565,7 @@ def about():
 			"font-size": "1rem",
 			"font-weight": 400,
 
-}
-	
-
+}}
     )
     if des1 == "SNOWGOV":
             st.markdown("""
