@@ -426,7 +426,7 @@ line-height: normal;
 
     # Display assigned roles in a table without index
     role_df = pd.DataFrame(roles_table_data)
-    st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
+    st.dataframe(role_df, use_container_width=False)  # Adjust width as needed
 
 
     # Display the roles to revoke multiselect widget
