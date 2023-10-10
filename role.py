@@ -1610,13 +1610,18 @@ def about():
         with st.expander('**Can I monitor Snowflake costs with SnowGov?**',expanded=False):
              st.markdown('''<p style="font-size:14px;">Yes, SnowGov provides cost-monitoring dashboards that allow you to track costs by accounts, projects, environments, and users, helping you optimize your Snowflake spending.</p>''', unsafe_allow_html=True)
 def Menu_navigator():
-	st.markdown('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap">', unsafe_allow_html=True)
-   	with st.sidebar:
+	with st.sidebar:
 		choice = option_menu(
           	menu_title="",
             	options=["User","Database" ,"Role", "Monitor","About"],
             	icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
             	menu_icon="menu-button-wide-fill",
+		styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa"},
+        "nav-link": {"font-family":"poppins !important","font-weight":400,"font-size": "18px", "text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#0096FF"},
+      }
+
 
         )
     pages = {
@@ -1626,12 +1631,7 @@ def Menu_navigator():
         "Monitor" : monitor,
         "About"   : about
     }
-    styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"poppins !important","font-weight":400,"font-size": "18px", "text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#0096FF"},
-      }
-
+    
     if choice == 'Database':
         current_page = "Database Management"
     elif choice == 'User':
