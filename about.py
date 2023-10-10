@@ -1677,7 +1677,7 @@ def customize_footer():
 
             /* Decrease the padding for .menu .container-xxl to make it smaller */
             .menu .container-xxl[data-v-5af006b8] {
-                padding: 1rem !important;
+                padding: 5rem !important;
             }
         </style>
         <div class="footer"></div>
