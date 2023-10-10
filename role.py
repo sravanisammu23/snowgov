@@ -13,7 +13,7 @@ from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-#image = Image.open('Hackathon/SnowGov.png')
+#image = Image.open('SnowGov.png')
 st.markdown("""
     <style>
         .main .block-container {
@@ -148,7 +148,7 @@ def database_management():
     col1, col2 = st.columns([1,20])
 
     with col1:
-        im = Image.open("Hackathon/Project-Title.png")
+        im = Image.open("Project-Title.png")
         st.image(im, width=24)
 
     with col2:
@@ -263,7 +263,7 @@ def user_creation_page():
     col1, col2 = st.columns([1,20])
 
     with col1:
-        im = Image.open("Hackathon/User-Title.png")
+        im = Image.open("User-Title.png")
         st.image(im, width=24)
 
     with col2:
@@ -316,7 +316,7 @@ def role_manage():
     col1, col2 = st.columns([1,20])
 
     with col1:
-        im = Image.open("Hackathon/Role-Title.png")
+        im = Image.open("Role-Title.png")
         st.image(im,width=24)
 
     with col2:
@@ -729,7 +729,7 @@ def monitor():
     col1, col2 = st.columns([1,20])
 
     with col1:
-        im = Image.open("Hackathon/Monitor-Title.png")
+        im = Image.open("Monitor-Title.png")
         st.image(im, width=24)
 
     with col2:
