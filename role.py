@@ -651,11 +651,9 @@ line-height: normal;
 
         granted_roles_data = fetch_roles_for_user(selected_user)
 
-    # Display granted roles in a table without index
-     st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
-	
-    role_df = pd.DataFrame(granted_roles_data)
-    st.dataframe(role_df)
+        # Display granted roles in a table with a specified width
+        role_df = pd.DataFrame(granted_roles_data)
+        st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
 
     # Fetch all roles and filter out the roles already granted
     all_roles = fetch_all_roles()
@@ -695,7 +693,6 @@ line-height: normal;
         st.write(result_message)
 
     con.close()
-
 
 
 def get_css_for_button():
