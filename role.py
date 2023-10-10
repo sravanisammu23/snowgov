@@ -13,7 +13,7 @@ from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('SnowGov.png')
+image = Image.open('Hackathon/SnowGov.png')
 st.markdown("""
     <style>
         .main .block-container {
