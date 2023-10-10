@@ -1648,21 +1648,22 @@ def Menu_navigator():
     pages[current_page]()
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
 # Main function with CSS applied at the beginning
-
 def customize_footer():
     st.markdown("""
         <style>
-            /* Adjust the padding for .st-emotion-cache-10oheav */
-	    .st-emotion-cache-10oheav {
-             padding: 2rem 0 !important;
-             }
+            /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
+            .st-emotion-cache-10oheav {
+                padding: 1.5rem 0 !important;
+            }
 
             /* Hide default footer */
-            .reportview-container .main footer {visibility: hidden;}
+            .reportview-container .main footer {
+                visibility: hidden;
+            }
 
             /* Add a new footer */
             .footer:after {
-                content:'Powered by Anblicks';
+                content: 'Powered by Anblicks';
                 visibility: visible;
                 display: block;
                 position: fixed;
@@ -1673,10 +1674,10 @@ def customize_footer():
                 color: gray;
                 z-index: 1000;
             }
-
         </style>
         <div class="footer"></div>
     """, unsafe_allow_html=True)
+
 
 
 def main():
