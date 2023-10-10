@@ -1674,16 +1674,10 @@ def customize_footer():
                 color: gray;
                 z-index: 1000;
             }
-
-            /* Decrease the padding for .menu .container-xxl to make it smaller */
-            .menu .container-xxl[data-v-5af006b8] {
-                padding: 1rem !important;
-		margin: 1rem !important; /* Set margin to 0 */
-                border: none !important;
-            }
         </style>
         <div class="footer"></div>
     """, unsafe_allow_html=True)
+
 
 
 
