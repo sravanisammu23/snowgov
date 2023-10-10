@@ -1652,7 +1652,7 @@ def customize_footer():
         <style>
             /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
             .st-emotion-cache-10oheav {
-                padding: 1rem 1rem;
+                padding: 4rem 1rem;
             }
 
             /* Hide default footer */
