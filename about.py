@@ -1565,6 +1565,7 @@ def about():
 			"font-weight": 400,
 
 }}
+    )
     if des1 == "SNOWGOV":
             st.markdown("""
             <div style="font-size:14px;"font-family": "Poppins"">
