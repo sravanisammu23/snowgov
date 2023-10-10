@@ -1562,7 +1562,6 @@ def about():
     des1=option_menu(
         menu_title =None,
         options=["SNOWGOV"],
-        icons = ["snow2"],
 	styles={
         "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
         "nav-link": {"font-family":"Poppins !important","font-size": "18px","text-align": "left", "margin":"0px", "--hover-color": "#eee"},
