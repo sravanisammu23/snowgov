@@ -1565,7 +1565,7 @@ def about():
     </style>
 """, unsafe_allow_html=True)
 	st.image("SnowGov.png",width=150)
-    des1="SNOWGOV"
+        des1="SNOWGOV"
     if des1 == "SNOWGOV":
             st.markdown("""
             <div style="font-size:12px;"font-family": " !important"">
