@@ -1653,9 +1653,9 @@ def customize_footer():
     st.markdown("""
         <style>
             /* Adjust the padding for .st-emotion-cache-10oheav */
-            .st-emotion-cache-10oheav {
-                padding: 1 1 !important;
-            }
+	    .st-emotion-cache-10oheav {
+             padding: 2rem 0 !important;
+             }
 
             /* Hide default footer */
             .reportview-container .main footer {visibility: hidden;}
