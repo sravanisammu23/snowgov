@@ -1616,7 +1616,19 @@ def Menu_navigator():
             icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
             menu_icon="menu-button-wide-fill",
 
-        )
+     	    styles={
+
+                "nav-link": {
+
+                    "margin":"0px 0px 1rem",
+                    "padding": "0px",
+                    "font-size": "1rem",
+                    "font-weight": 400,
+                    "font-family":"poppins",
+		    }
+
+                }
+		)
     pages = {
         "User Creation": user_creation_page,
         "Database Management": database_management,
@@ -1624,11 +1636,6 @@ def Menu_navigator():
         "Monitor" : monitor,
         "About"   : about
     }
-    styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"poppins","font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#0096FF"},
-      }
     if choice == 'Database':
         current_page = "Database Management"
     elif choice == 'User':
