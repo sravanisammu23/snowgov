@@ -621,9 +621,9 @@ def fetch_all_roles():
 def role_assignment():
     # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
-    result_message=None
+    result_message = None
 
-    col1, col2,col3 = st.columns([33,33,34])
+    col1, col2, col3 = st.columns([33, 33, 34])
     users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
 
     with col1:
@@ -643,7 +643,7 @@ font-weight: 600;
 line-height: normal;
     }
     </style>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
         selected_user = st.selectbox('User', users)
 
@@ -657,7 +657,7 @@ line-height: normal;
     roles_to_display = list(set(all_roles) - set(granted_roles))
 
     with col2:
-            st.markdown("""
+        st.markdown("""
     <style>
         .stMultiSelect [data-baseweb=select] span{
             padding: 5px;
@@ -672,23 +672,16 @@ line-height: normal;
     }
     </style>
     """, unsafe_allow_html=True)
-            roles_to_grant = st.multiselect('Roles', roles_to_display)
-
-
+        roles_to_grant = st.multiselect('Roles', roles_to_display)
 
     with col3:
         st.markdown(get_css_for_button(), unsafe_allow_html=True)
         if st.button('Assign'):
             try:
-
                 if not roles_to_grant:
                     st.warning('**Please select roles to grant.**')
-
                 else:
-
                     result_message = grant_roles_and_log_using_sp(selected_user, roles_to_grant)
-
-
             except:
                 pass
 
@@ -699,17 +692,22 @@ line-height: normal;
 
     else:
         st.markdown("""
-                <style>.stDataeditor>{
-                  background-color: 8017f5;
-                }
-                    </style>""",unsafe_allow_html=True)
+                <style>
+                    .stDataeditor {
+                        background-color: #8017f5;
+                        width: 100%;  /* Adjust width as needed */
+                    }
+                </style>
+                """, unsafe_allow_html=True)
         edited_df = st.data_editor(
-     df,
-    hide_index=True,
-    use_container_width=False
-)
+            df,
+            hide_index=True,
+            use_container_width=False  # Set this to False
+        )
+
     if result_message:
         st.write(result_message)
+
     con.close()
 
 
