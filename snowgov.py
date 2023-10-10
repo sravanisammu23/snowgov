@@ -1573,7 +1573,7 @@ def about():
     if des1 == "SNOWGOV":
         with st.expander('**Description**', expanded=False):
             st.markdown("""
-            <div style="font-size:14px;"font-family": "Poppins"">
+            <div style="font-size:14px;"font-family": """>
                 <p style="font-size:14px;">This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
                 <ul style="font-size:14px;">
                     <li style="font-size:14px;">User interface through which the IT team can configure Organization and Account Parameters</li>
