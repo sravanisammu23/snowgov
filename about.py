@@ -1677,7 +1677,7 @@ def customize_footer():
         <div class="footer"></div>
     """, unsafe_allow_html=True)
 
-    
+ def main():
     custom_css = get_custom_css()
     st.markdown(custom_css, unsafe_allow_html=True)
     
