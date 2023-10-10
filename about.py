@@ -13,13 +13,13 @@ from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('image_1.png')
+#image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .main .block-container {
 	
-	    margin-top:  -10rem;
-            margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
+	    margin-top:  -0rem;
+            margin-left: -0rem;  /* Adjust this value as needed to reduce the gap */
         }
     </style>
     """, unsafe_allow_html=True)
@@ -44,7 +44,7 @@ def get_custom_css():
 </style>"""
 custom_css = get_custom_css()
 st.markdown(custom_css, unsafe_allow_html=True)
-st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+#st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
@@ -1593,6 +1593,7 @@ def about():
             st.markdown('''<p style="font-size:14px;">SnowGov streamlines user onboarding and role assignment, ensuring that users have the right access permissions within databases or schemas.</p>''', unsafe_allow_html=True)
         with st.expander('**Can I monitor Snowflake costs with SnowGov?**',expanded=False):
              st.markdown('''<p style="font-size:14px;">Yes, SnowGov provides cost-monitoring dashboards that allow you to track costs by accounts, projects, environments, and users, helping you optimize your Snowflake spending.</p>''', unsafe_allow_html=True)
+def Menu_navigator():
     with st.sidebar:
         choice = option_menu(
            menu_title="",
@@ -1628,7 +1629,6 @@ def about():
     pages[current_page]()
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
 # Main function with CSS applied at the beginning
-
 
 def customize_footer():
     st.markdown("""
