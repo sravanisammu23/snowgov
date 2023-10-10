@@ -1559,8 +1559,8 @@ def about():
         options=["SNOWGOV"],
 	styles={
 		"nav-link": {
-			"margin":"0px 0px 5rem",
-			"padding": "0px",
+			"margin":"0px 0px 0rem",
+			"padding": "2px",
 			"font-size": "1rem",
 			"font-weight": 400,
 
