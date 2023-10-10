@@ -1650,10 +1650,7 @@ def Menu_navigator():
 def customize_footer():
     st.markdown("""
         <style>
-            /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
-            .st-emotion-cache-10oheav {
-                padding: 2rem 0 !important;
-            }
+
 	    .st-emotion-cache-10oheav {
              padding: 2rem 1rem;
             }
