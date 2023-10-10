@@ -1560,7 +1560,7 @@ def about():
 	styles={
 		"nav-link": {
 			"margin":"0px 0px 0rem",
-			"padding": "2px",
+			"padding": "3px",
 			"font-size": "1rem",
 			"font-weight": 400,
 
@@ -1585,7 +1585,7 @@ def about():
 	styles={
 		"nav-link": {
 			"margin":"0px 0px 1rem",
-			"padding": "0px",
+			"padding": "3px",
 			"font-size": "1rem",
 			"font-weight": 400,
 
