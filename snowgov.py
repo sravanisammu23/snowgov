@@ -1616,19 +1616,6 @@ def Menu_navigator():
             options=["User","Database" ,"Role", "Monitor","About"],
             icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
             menu_icon="menu-button-wide-fill",
-	styles={
-       
-        "nav-link": {
-		"font-family":"Poppins !important",
-		"text-align": "left", 
-		"--hover-color": "#eee",
-	        "margin":"0px",
-                "padding": "10px 30px",
-                "font-size": "16px",
-                "font-weight": 400,
-       
-      }
-	}
 
         )
     pages = {
@@ -1638,7 +1625,11 @@ def Menu_navigator():
         "Monitor" : monitor,
         "About"   : about
     }
-   
+    styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa"},
+        "nav-link": {"font-family":"","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#0096FF"},
+      }
     if choice == 'Database':
         current_page = "Database Management"
     elif choice == 'User':
@@ -1653,7 +1644,6 @@ def Menu_navigator():
     st.session_state.current_page = current_page
     pages[current_page]()
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
-# Main function with CSS applied at the beginning
 
 def customize_footer():
     st.markdown("""
