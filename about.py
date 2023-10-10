@@ -1654,6 +1654,9 @@ def customize_footer():
             .st-emotion-cache-10oheav {
                 padding: 2rem 0 !important;
             }
+	    .st-emotion-cache-10oheav {
+             padding: 2rem 1rem;
+            }
 
             /* Hide default footer */
             .reportview-container .main footer {
