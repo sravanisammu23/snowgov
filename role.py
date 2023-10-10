@@ -1591,6 +1591,7 @@ def about():
 			"font-weight": 400,
 
 }
+	}
 
     )
     if faq == "FAQ's":
