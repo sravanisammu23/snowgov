@@ -1557,19 +1557,16 @@ def monitor2(tab_id):
     """
  
 def about():
+	    st.markdown("""
+        <style>
+            body img[src="SnowGov.png"] {
+                margin-left: -100000px !important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+	st.image("SnowGov.png",width=150)
     # Create an expander for the about section
-    des1=option_menu(
-        menu_title =None,
-        options=["SNOWGOV"],
-	styles={
-		"nav-link": {
-			"margin":"0px 0px 0rem",
-			"padding": "2px",
-			"font-size": "1rem",
-			"font-weight": 400,
-
-}}
-    )
+    des1="SNOWGOV"
     if des1 == "SNOWGOV":
             st.markdown("""
             <div style="font-size:12px;"font-family": " !important"">
@@ -1582,21 +1579,7 @@ def about():
                 </ul>
             </div>
             """, unsafe_allow_html=True)
-    faq=option_menu(
-        menu_title =None,
-        options=["FAQ's"],
-        icons =["bookmarks-fill"],
-	styles={
-		"nav-link": {
-			"margin":"0px 0px 1rem",
-			"padding": "2px",
-			"font-size": "1rem",
-			"font-weight": 400,
-
-}
-	}
-
-    )
+    faq=o"FAQ's"
     if faq == "FAQ's":
         with st.expander("**What is SnowGov, and why do I need it?**",expanded=False):
             st.markdown("""
