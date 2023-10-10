@@ -1560,7 +1560,7 @@ def about():
     st.markdown("""
 	<style>
 	.element-container {
-	    margin-left: -10px !important;
+	    margin-left: -20px !important;
 	}
 	</style>
 	""", unsafe_allow_html=True)
