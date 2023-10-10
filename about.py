@@ -1558,12 +1558,13 @@ def monitor2(tab_id):
  
 def about():
 	st.markdown("""
-	    <style>
-	        .element-container {
-	            margin-left: -10px !important;
-	        }
-	    </style>
-	""", unsafe_allow_html=True)
+    <style>
+        .element-container {
+            margin-left: -10px !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 
 
 
