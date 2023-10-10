@@ -1652,6 +1652,11 @@ def Menu_navigator():
 def customize_footer():
     st.markdown("""
         <style>
+            /* Adjust the padding for .st-emotion-cache-10oheav */
+            .st-emotion-cache-10oheav {
+                padding: 0 0 !important;
+            }
+
             /* Hide default footer */
             .reportview-container .main footer {visibility: hidden;}
 
@@ -1669,14 +1674,10 @@ def customize_footer():
                 z-index: 1000;
             }
 
-            /* Adjust the position of the menu */
-            .menu .container-xxl[data-v-5af006b8] {
-                margin-top: 0rem !important;
-                padding-top: 0rem !important;
-            }
         </style>
         <div class="footer"></div>
     """, unsafe_allow_html=True)
+
 
 def main():
     st.markdown("""
