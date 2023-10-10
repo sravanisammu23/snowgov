@@ -19,7 +19,7 @@ st.markdown("""
         .main .block-container {
 	
 	    margin-top:  -10rem;
-            margin-left: -10rem;  /* Adjust this value as needed to reduce the gap */
+            margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
         }
     </style>
     """, unsafe_allow_html=True)
@@ -420,14 +420,13 @@ line-height: normal;
     }
     </style>
     """, unsafe_allow_html=True)
-        selected_user = st.selectbox('Select User', users)
+        selected_user = st.selectbox('Select User', users, key='u1')
 
     roles_table_data = fetch_roles_for_user3(selected_user)
 
     # Display assigned roles in a table without index
     role_df = pd.DataFrame(roles_table_data)
-    st.dataframe(role_df, use_container_width=False,width=800)  # Adjust width as needed
-
+    st.dataframe(role_df)
 
     # Display the roles to revoke multiselect widget
     with col2:
@@ -621,9 +620,9 @@ def fetch_all_roles():
 def role_assignment():
     # Connect to Snowflake
     con = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
-    result_message = None
+    result_message=None
 
-    col1, col2, col3 = st.columns([33, 33, 34])
+    col1, col2,col3 = st.columns([33,33,34])
     users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
 
     with col1:
@@ -643,7 +642,7 @@ font-weight: 600;
 line-height: normal;
     }
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
         selected_user = st.selectbox('User', users)
 
@@ -657,7 +656,7 @@ line-height: normal;
     roles_to_display = list(set(all_roles) - set(granted_roles))
 
     with col2:
-        st.markdown("""
+            st.markdown("""
     <style>
         .stMultiSelect [data-baseweb=select] span{
             padding: 5px;
@@ -672,16 +671,23 @@ line-height: normal;
     }
     </style>
     """, unsafe_allow_html=True)
-        roles_to_grant = st.multiselect('Roles', roles_to_display)
+            roles_to_grant = st.multiselect('Roles', roles_to_display)
+
+
 
     with col3:
         st.markdown(get_css_for_button(), unsafe_allow_html=True)
         if st.button('Assign'):
             try:
+
                 if not roles_to_grant:
                     st.warning('**Please select roles to grant.**')
+
                 else:
+
                     result_message = grant_roles_and_log_using_sp(selected_user, roles_to_grant)
+
+
             except:
                 pass
 
@@ -692,23 +698,18 @@ line-height: normal;
 
     else:
         st.markdown("""
-                <style>
-                    .stDataeditor {
-                        background-color: #8017f5;
-                        width: 100%;  /* Adjust width as needed */
-                    }
-                </style>
-                """, unsafe_allow_html=True)
+                <style>.stDataeditor>{
+                  background-color: 8017f5;
+                }
+                    </style>""",unsafe_allow_html=True)
         edited_df = st.data_editor(
-            df,
-            hide_index=True,
-            use_container_width=False  # Set this to False
-        )
-
+     df,
+    hide_index=True,
+)
     if result_message:
         st.write(result_message)
-
     con.close()
+
 
 
 
@@ -784,7 +785,7 @@ def construct_project_query(environments):
         return f"""
             SELECT DISTINCT MAX(CASE WHEN tag_name = 'COST_CENTER' THEN tag_value END)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
-            WHERE LEFT(object_name, 4) IN ({environments_str}) AND domain = 'WAREHOUSE'
+            WHERE split_part(object_name,'_',1) IN ({environments_str}) AND domain = 'WAREHOUSE'
             GROUP BY object_name;
         """
     else:
@@ -803,7 +804,7 @@ def construct_subject_query(environments, projects):
         return f"""
             SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
-            WHERE LEFT(object_name, 4) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA'
+            WHERE split_part(object_name,'_',1) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA'
             AND object_name IN (
                 SELECT DISTINCT tr.object_name
                 FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES tr
@@ -814,7 +815,7 @@ def construct_subject_query(environments, projects):
         return f"""
             SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
-            WHERE LEFT(object_name, 4) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
+            WHERE split_part(object_name,'_',1) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
         """
     elif projects:
         return f"""
@@ -843,7 +844,7 @@ def construct_query(environments, projects, subject_areas, start_date, end_date)
         return f"""
             SELECT warehouse_name, SUM(credits_used) as credits_used
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".WAREHOUSE_METERING_HISTORY
-            WHERE LEFT(warehouse_name, 4) = '{environment}'
+            WHERE split_part(warehouse_name, '_', 1) = '{environment}'
             AND warehouse_name IN (
                 SELECT DISTINCT tr.object_name
                 FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES tr
@@ -863,7 +864,7 @@ def construct_query(environments, projects, subject_areas, start_date, end_date)
         subject_areas_str = ', '.join(f"'{subj}'" for subj in subject_areas) if subject_areas else ''
         where_clauses = []
         if environments:
-            where_clauses.append(f"LEFT(warehouse_name, 4) IN ({environments_str})")
+            where_clauses.append(f"split_part(warehouse_name, '_', 1) IN ({environments_str})")
         if projects:
             where_clauses.append(f"warehouse_name IN (SELECT DISTINCT tr.object_name FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'COST_CENTER' AND tr.tag_value IN ({projects_str}))")
         if subject_areas:
@@ -884,7 +885,7 @@ def fetch_all_warehouses(conn, environment, project, subject_area):
         FROM "SNOWFLAKE"."ACCOUNT_USAGE".WAREHOUSE_METERING_HISTORY wmh
         JOIN "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES tr
         ON wmh.warehouse_name = tr.object_name
-        WHERE LEFT(wmh.warehouse_name, 4) = '{environment}'
+        WHERE split_part(wmh.warehouse_name, '_', 1) = '{environment}'
         AND tr.tag_name = 'COST_CENTER' AND tr.tag_value = '{project}'
         AND tr.tag_name = 'SUBJECT_AREA' AND tr.tag_value = '{subject_area}'
     """
@@ -898,7 +899,7 @@ def construct_hourly_query(environment, start_date):
         SELECT to_char(start_time, 'HH24') as hour, sum(credits_used)
         FROM "SNOWFLAKE"."ACCOUNT_USAGE".WAREHOUSE_METERING_HISTORY
         WHERE start_time >= '{start_date.strftime('%Y-%m-%d %H:%M:%S')}'
-        AND LEFT(warehouse_name, 4) = '{environment}'
+        AND split_part(warehouse_name, '_', 1) = '{environment}'
         GROUP BY hour
         ORDER BY hour;
     """
@@ -977,7 +978,7 @@ def monitor3(tab_id):
     # Environment Filter
 
     with col_env:
-        environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
+        environments = ['All', 'DEV', 'PROD', 'STAGE', 'TEST']
         selected_environments = st.multiselect('ENVIRONMENT :', environments, default=['All'])
 
     # Check if an environment is selected
@@ -1065,7 +1066,7 @@ def monitor3(tab_id):
             filter_condition = "1=1"  # Default condition when 'All' is selected
     else:
             selected_env_str = ', '.join([f"'{env[:4]}'" for env in selected_environments])
-            filter_condition = f"LEFT(warehouse_name, 4) IN ({selected_env_str})"
+            filter_condition = f"split_part(warehouse_name, '_', 1) IN ({selected_env_str})"
         # Construct the query based on the filter condition
     query = f"""
             SELECT
@@ -1144,7 +1145,7 @@ def monitor3(tab_id):
                 FROM
                     snowflake.account_usage.query_history
                 WHERE
-                    LEFT(warehouse_name, 4) IN ({selected_env_str})
+                    split_part(warehouse_name, '_', 1) IN ({selected_env_str})
                 GROUP BY
                     warehouse_name, query_type
                 ORDER BY
@@ -1190,7 +1191,7 @@ def monitor3(tab_id):
                 FROM
                     snowflake.account_usage.warehouse_metering_history
                 WHERE
-                    LEFT(warehouse_name, 4) IN ({selected_env_str})
+                    split_part(warehouse_name, '_', 1) IN ({selected_env_str})
                 GROUP BY
                     1
                 ORDER BY
@@ -1647,22 +1648,16 @@ def Menu_navigator():
     pages[current_page]()
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
 # Main function with CSS applied at the beginning
+
 def customize_footer():
     st.markdown("""
         <style>
-            /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
-            .st-emotion-cache-10oheav {
-                padding: 2rem 1rem;
-            }
-
             /* Hide default footer */
-            .reportview-container .main footer {
-                visibility: hidden;
-            }
+            .reportview-container .main footer {visibility: hidden;}
 
             /* Add a new footer */
             .footer:after {
-                content: 'Powered by Anblicks';
+                content:'Powered by Anblicks';
                 visibility: visible;
                 display: block;
                 position: fixed;
@@ -1677,8 +1672,16 @@ def customize_footer():
         <div class="footer"></div>
     """, unsafe_allow_html=True)
 
-
 def main():
+    st.markdown("""
+        <style>
+            .stApp {
+                margin-left: 0!important;
+                padding-left: 0!important;
+            }
+        </style>
+    """, unsafe_allow_html=True)
+    
     custom_css = get_custom_css()
     st.markdown(custom_css, unsafe_allow_html=True)
     
