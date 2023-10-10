@@ -1610,19 +1610,19 @@ def about():
         with st.expander('**Can I monitor Snowflake costs with SnowGov?**',expanded=False):
              st.markdown('''<p style="font-size:14px;">Yes, SnowGov provides cost-monitoring dashboards that allow you to track costs by accounts, projects, environments, and users, helping you optimize your Snowflake spending.</p>''', unsafe_allow_html=True)
 def Menu_navigator():
-	with st.sidebar:
-		choice = option_menu(
-          	menu_title="",
-            	options=["User","Database" ,"Role", "Monitor","About"],
-            	icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
-            	menu_icon="menu-button-wide-fill",
-		styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"poppins !important","font-weight":400,"font-size": "18px", "text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#0096FF"},
+    with st.sidebar:
+	    choice = option_menu(
+            menu_title="",
+            options=["User","Database" ,"Role", "Monitor","About"],
+            icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
+            menu_icon="menu-button-wide-fill",
+	     styles={
+		     "container": {"padding": "0!important", "background-color": "#fafafa"},
+       		"nav-link": {"font-family":"poppins !important","font-weight":400,"font-size": "18px", "text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
+        	"nav-link-selected": {"background-color": "#0096FF"},
       }
 )
-    	pages = {
+    pages = {
 		"User Creation": user_creation_page,
         	"Database Management": database_management,
        		 "Role Management" : role_manage,
