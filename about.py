@@ -1581,7 +1581,7 @@ def about():
                 </ul>
             </div>
             """, unsafe_allow_html=True)
-    faq=o"FAQ's"
+    faq="FAQ's"
     if faq == "FAQ's":
         with st.expander("**What is SnowGov, and why do I need it?**",expanded=False):
             st.markdown("""
