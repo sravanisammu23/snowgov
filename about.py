@@ -1640,6 +1640,7 @@ def Menu_navigator():
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
 # Main function with CSS applied at the beginning
 
+
 def customize_footer():
     st.markdown("""
         <style>
