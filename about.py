@@ -981,6 +981,10 @@ def monitor3(tab_id):
         environments = ['All', 'DEV_', 'PROD', 'STAG', 'TEST']
 
         selected_environments = st.multiselect('ENVIRONMENT :', environments, default=['All'])
+	if not selected_environments:
+        st.warning("Please select at least one option for the Environment filter.")
+        return
+	    
 
 
 
