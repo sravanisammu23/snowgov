@@ -647,7 +647,7 @@ line-height: normal;
     }
     </style>
     """, unsafe_allow_html=True)
-        selected_user = st.selectbox('Select User', users, key='u1')
+        selected_user = st.selectbox('Select User', users)
 
     roles_table_data = fetch_roles_for_user3(selected_user)
 
