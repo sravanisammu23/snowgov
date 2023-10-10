@@ -13,7 +13,7 @@ from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('SnowGov.png')
+#image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .main .block-container {
@@ -31,7 +31,7 @@ def get_custom_css():
 
 .stButton>button {
     background: linear-gradient(to right, #a02a41 0%,    #1D4077 100%);
-    font-family: Poppins !important;
+    font-family: Poppins;
     padding: 10px 30px;
     color: white;
     border-radius: 50px;
@@ -44,7 +44,7 @@ def get_custom_css():
 </style>"""
 custom_css = get_custom_css()
 st.markdown(custom_css, unsafe_allow_html=True)
-st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+#st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
@@ -56,7 +56,7 @@ SNOWFLAKE_CONFIG = {
     "database": "UTIL_DB",
     "schema": "ADMIN_TOOLS"
 }
-with open ("styles_1.css") as f:
+with open ('styles_1.css') as f:
         st.markdown(f'<style>{f.read()}</style>',unsafe_allow_html=True)
 
 if "grant_users" not in st.session_state:
@@ -505,7 +505,7 @@ def fetch_users_for_role2(conn, role):
 
     try:
         cur = conn.cursor()
-        cur.execute(f"SELECT DISTINCT USERNAME FROM \"BILLING_USAGE\".\"DASHBOARD\".\"RESULT_TABLE\" WHERE ROLENAME= '{role}'")
+        cur.execute(f"SELECT DISTINCT USERNAME FROM \"BILLING_USAGE\".\"DASHBOARD\".\"USER_ROLE_MAPPING\" WHERE ROLENAME= '{role}'")
         users = [row[0] for row in cur.fetchall()]
         cur.close()
         return users
@@ -622,7 +622,7 @@ def role_assignment():
     result_message=None
 
     col1, col2,col3 = st.columns([33,33,34])
-    users = [row[0] for row in con.cursor().execute('SELECT DISTINCT USERNAME FROM BILLING_USAGE.DASHBOARD.RESULT_TABLE;').fetchall()]
+    users = [row[0] for row in con.cursor().execute('SHOW USERS;').fetchall()]
 
     with col1:
         st.markdown("""
@@ -1560,7 +1560,7 @@ def about():
 	styles={
 		"nav-link": {
 			"margin":"0px 0px 0rem",
-			"padding": "3px",
+			"padding": "2px",
 			"font-size": "1rem",
 			"font-weight": 400,
 
@@ -1585,7 +1585,7 @@ def about():
 	styles={
 		"nav-link": {
 			"margin":"0px 0px 1rem",
-			"padding": "3px",
+			"padding": "2px",
 			"font-size": "1rem",
 			"font-weight": 400,
 
@@ -1609,27 +1609,26 @@ def about():
         with st.expander('**Can I monitor Snowflake costs with SnowGov?**',expanded=False):
              st.markdown('''<p style="font-size:14px;">Yes, SnowGov provides cost-monitoring dashboards that allow you to track costs by accounts, projects, environments, and users, helping you optimize your Snowflake spending.</p>''', unsafe_allow_html=True)
 def Menu_navigator():
-    st.markdown('<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=&display=swap">', unsafe_allow_html=True)
     with st.sidebar:
-	    choice = option_menu(
-            menu_title="",
+        choice = option_menu(
+           menu_title="",
             options=["User","Database" ,"Role", "Monitor","About"],
             icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
             menu_icon="menu-button-wide-fill",
-	     styles={
-		     "container": {"padding": "0!important", "background-color": "#fafafa"},
-       		"nav-link": {"font-family":"Poppins!important","font-weight":400,"font-size": "18px","text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
-        	"nav-link-selected": {"background-color": "#6D7294"},
-      }
-)
+
+        )
     pages = {
-		"User Creation": user_creation_page,
-        	"Database Management": database_management,
-       		 "Role Management" : role_manage,
-        	"Monitor" : monitor,
-        	"About"   : about
+        "User Creation": user_creation_page,
+        "Database Management": database_management,
+        "Role Management" : role_manage,
+        "Monitor" : monitor,
+        "About"   : about
     }
-    
+    styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa"},
+        "nav-link": {"font-family":"","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#0096FF"},
+      }
     if choice == 'Database':
         current_page = "Database Management"
     elif choice == 'User':
