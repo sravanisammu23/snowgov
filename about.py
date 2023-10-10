@@ -1557,10 +1557,15 @@ def about():
     des1=option_menu(
         menu_title =None,
         options=["SNOWGOV"],
-        icons = ["snow2"],
+	styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
+        "nav-link": {"font-family":"Poppins !important","font-size": "18px","text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
+             }
 
     )
     if des1 == "SNOWGOV":
+        with st.expander('**Description**', expanded=False):
             st.markdown("""
             <div style="font-size:14px;"font-family": "Poppins"">
                 <p style="font-size:14px;">This project is to demonstrate the power of Snowflake Native Apps. The objective of this project is to develop an App that provides GUI-based governance features for managing the Snowflake environment. Some of the features include:</p>
@@ -1576,6 +1581,11 @@ def about():
         menu_title =None,
         options=["FAQ's"],
         icons =["bookmarks-fill"],
+	styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
+        "nav-link": {"font-family":"Poppins !important","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
+             }
 
     )
     if faq == "FAQ's":
