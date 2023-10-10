@@ -1564,12 +1564,7 @@ def about():
         }
     </style>
 """, unsafe_allow_html=True)
-
-
-
-
-# Displaying your logo
-    st.image("SnowGov.png",width=150)
+	st.image("SnowGov.png",width=150)
     des1="SNOWGOV"
     if des1 == "SNOWGOV":
             st.markdown("""
