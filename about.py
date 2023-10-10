@@ -1652,7 +1652,7 @@ def customize_footer():
         <style>
             /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
             .st-emotion-cache-10oheav {
-                padding: 2rem 0rem;
+                padding: 2rem 1rem;
             }
 
             /* Hide default footer */
@@ -1676,6 +1676,7 @@ def customize_footer():
         </style>
         <div class="footer"></div>
     """, unsafe_allow_html=True)
+
 
 def main():
     custom_css = get_custom_css()
