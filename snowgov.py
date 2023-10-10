@@ -1565,7 +1565,7 @@ def about():
         icons = ["snow2"],
 	styles={
         "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link": {"font-family":"poppins !important","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
              }
 
@@ -1588,8 +1588,8 @@ def about():
         options=["FAQ's"],
         icons =["bookmarks-fill"],
 	styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
-        "nav-link": {"font-family":"Sans serif","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "poppins"},
+        "nav-link": {"font-family":"poppins !important","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
         "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
              }
 
@@ -1622,12 +1622,13 @@ def Menu_navigator():
 		"font-family":"poppins !important",
 		"text-align": "left", 
 		"--hover-color": "#eee",
-	        "margin":"0px 0px 1rem",
+	        "margin":"0px",
                 "padding": "0px",
                 "font-size": "1rem",
                 "font-weight": 400,
        
       }
+	}
 
         )
     pages = {
