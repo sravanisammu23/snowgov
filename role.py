@@ -1618,7 +1618,7 @@ def Menu_navigator():
             menu_icon="menu-button-wide-fill",
 	     styles={
 		     "container": {"padding": "0!important", "background-color": "#fafafa"},
-       		"nav-link": {"font-family":"Poppins !important","font-weight":400,"font-size": "18px","text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
+       		"nav-link": {"font-family":"Poppins!important","font-weight":400,"font-size": "18px","text-align": "left", "margin":"0px 0px 1rem ", "--hover-color": "#eee"},
         	"nav-link-selected": {"background-color": "#6D7294"},
       }
 )
