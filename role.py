@@ -47,12 +47,13 @@ st.markdown(custom_css, unsafe_allow_html=True)
 #st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
+
 SNOWFLAKE_CONFIG = {
-    "account": "fy50889.us-east4.gcp",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
+    "account": "anblicksorg_aws.us-east-1",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
     "user": "snowgov",#snowgov
-    "password": "WelcomeToGCP23!",#SnowGov@202308
-    "role": "SNOWGOVADMIN_ACL",
-    "warehouse": "SNOWGOV_WAREHOUSE",#SNOWGOV_WH
+    "password": "SnowGov@202308",#SnowGov@202308
+    "role": "ACCOUNTADMIN",
+    "warehouse": "SNOWGOV_WH",#SNOWGOV_WH
     "database": "UTIL_DB",
     "schema": "ADMIN_TOOLS"
 }
