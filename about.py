@@ -49,11 +49,11 @@ st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=F
 #connect to snowflake function
 
 SNOWFLAKE_CONFIG = {
-    "account": "anblicksorg_aws.us-east-1",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
+    "account": "fy50889.us-east4.gcp",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
     "user": "snowgov",#snowgov
-    "password": "SnowGov@202308",#SnowGov@202308
-    "role": "ACCOUNTADMIN",
-    "warehouse": "SNOWGOV_WH",#SNOWGOV_WH
+    "password": "WelcomeToGCP23!",#SnowGov@202308
+    "role": "SNOWGOVADMIN_ACL",
+    "warehouse": "SNOWGOV_WAREHOUSE",#SNOWGOV_WH
     "database": "UTIL_DB",
     "schema": "ADMIN_TOOLS"
 }
