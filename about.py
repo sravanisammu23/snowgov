@@ -1650,9 +1650,9 @@ def Menu_navigator():
 def customize_footer():
     st.markdown("""
         <style>
-
-	    .st-emotion-cache-10oheav {
-             padding: 2rem 1rem;
+            /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
+            .st-emotion-cache-10oheav {
+                padding: 2rem 1rem;
             }
 
             /* Hide default footer */
@@ -1677,19 +1677,6 @@ def customize_footer():
         <div class="footer"></div>
     """, unsafe_allow_html=True)
 
-
-
-
-
-def main():
-    st.markdown("""
-        <style>
-            .stApp {
-                margin-left: 0!important;
-                padding-left: 0!important;
-            }
-        </style>
-    """, unsafe_allow_html=True)
     
     custom_css = get_custom_css()
     st.markdown(custom_css, unsafe_allow_html=True)
