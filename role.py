@@ -1558,6 +1558,15 @@ def about():
         menu_title =None,
         options=["SNOWGOV"],
         icons = ["snow2"],
+	styles={
+		"nav-link": {
+			"margin":"0px 0px 1rem",
+			"padding": "0px",
+			"font-size": "1rem",
+			"font-weight": 400,
+
+}
+	
 
     )
     if des1 == "SNOWGOV":
@@ -1576,6 +1585,14 @@ def about():
         menu_title =None,
         options=["FAQ's"],
         icons =["bookmarks-fill"],
+	styles={
+		"nav-link": {
+			"margin":"0px 0px 1rem",
+			"padding": "0px",
+			"font-size": "1rem",
+			"font-weight": 400,
+
+}
 
     )
     if faq == "FAQ's":
