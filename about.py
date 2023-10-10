@@ -13,7 +13,7 @@ from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-#image = Image.open('image_1.png')
+image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .main .block-container {
@@ -44,7 +44,7 @@ def get_custom_css():
 </style>"""
 custom_css = get_custom_css()
 st.markdown(custom_css, unsafe_allow_html=True)
-#st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
