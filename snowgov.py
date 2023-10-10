@@ -49,7 +49,7 @@ st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=F
 #connect to snowflake function
 SNOWFLAKE_CONFIG = {
     "account": "fy50889.us-east4.gcp",
-    "user": "snowgovadmin",
+    "user": "snowgov",
     "password": "WelcomeToGCP23!",
     "role": "accountadmin",
     "warehouse": "SNOWGOV_WAREHOUSE",
