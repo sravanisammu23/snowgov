@@ -19,7 +19,7 @@ st.markdown("""
         .main .block-container {
 	
 	    margin-top:  -10rem;
-            margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
+            margin-left: -10rem;  /* Adjust this value as needed to reduce the gap */
         }
     </style>
     """, unsafe_allow_html=True)
@@ -1652,7 +1652,7 @@ def customize_footer():
         <style>
             /* Adjust the padding for .st-emotion-cache-10oheav to push content down */
             .st-emotion-cache-10oheav {
-                padding: 4rem 1rem;
+                padding: 2rem 0rem;
             }
 
             /* Hide default footer */
