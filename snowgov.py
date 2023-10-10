@@ -1644,6 +1644,7 @@ def Menu_navigator():
     st.session_state.current_page = current_page
     pages[current_page]()
     st.sidebar.markdown("</div>", unsafe_allow_html=True)
+# Main function with CSS applied at the beginning
 
 def customize_footer():
     st.markdown("""
@@ -1656,8 +1657,6 @@ def customize_footer():
                 content:'Powered by Anblicks';
                 visibility: visible;
                 display: block;
-		font-style: Poppins;
-  		font-weight : 400;
                 position: fixed;
                 /* Adjust to place it at the bottom right */
                 right: 10rem;
@@ -1695,6 +1694,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-    customize_footer()
 
