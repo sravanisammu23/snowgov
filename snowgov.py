@@ -1623,7 +1623,7 @@ def Menu_navigator():
 		"text-align": "left", 
 		"--hover-color": "#eee",
 	        "margin":"0px",
-                "padding": "0px",
+                "padding": "10px 30px",
                 "font-size": "16px",
                 "font-weight": 400,
        
