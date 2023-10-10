@@ -1556,25 +1556,7 @@ def monitor2(tab_id):
     order by ROW_COUNT desc,9,8
     limit 10;
     """
-    def load_data():
-        with snowflake.connector.connect(**SNOWFLAKE_CONFIG) as conn:
-            cur = conn.cursor(snowflake.connector.DictCursor)
-            cur.execute(LOW_ACCESS_HIGH_VOLUME_SQL)
-            df = pd.DataFrame(cur.fetchall())
-            df.columns = [col[0] for col in cur.description]
-        return df
-    df = load_data()
-    if not df.empty:
-        fig = px.bar(df, x='TABLE_NAME', y='ROW_COUNT',
-                     labels={'TABLE_NAME': 'Table Name', 'ROW_COUNT': 'Row Count'},
-                     title='Low Accessibility, High Data Volume')
-        fig.update_layout(xaxis_title='Table',
-                        yaxis_title='Row Count',
-                        bargap=0.2,
-                        bargroupgap=0.1)
-        st.plotly_chart(fig)
-    else:
-        st.write("No data available.")
+
 def about():
     # Create an expander for the about section
     des1=option_menu(
