@@ -1557,15 +1557,17 @@ def monitor2(tab_id):
     """
  
 def about():
-	    st.markdown("""
+    st.markdown("""
         <style>
             body img[src="SnowGov.png"] {
                 margin-left: -100000px !important;
             }
         </style>
     """, unsafe_allow_html=True)
-	st.image("SnowGov.png",width=150)
-    # Create an expander for the about section
+
+
+# Displaying your logo
+    st.image("SnowGov.png",width=150)
     des1="SNOWGOV"
     if des1 == "SNOWGOV":
             st.markdown("""
