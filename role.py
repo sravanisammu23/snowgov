@@ -423,12 +423,12 @@ line-height: normal;
         selected_user = st.selectbox('Select User', users, key='u1')
 
     roles_table_data = fetch_roles_for_user3(selected_user)
-    st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
 
-    # Display assigned roles in a table without index
+    # Display assigned roles in a table with a specified width
     role_df = pd.DataFrame(roles_table_data)
-    st.dataframe(role_df)
-
+    
+    # Increase the width of the dataframe table
+    st.dataframe(role_df, use_container_width=False, width=800)  # Adjust width as needed
 
     # Display the roles to revoke multiselect widget
     with col2:
@@ -462,7 +462,6 @@ line-height: normal;
         st.write(result_message)
 
     con.close()
-
 
 
 def connect_to_snowflake2():
