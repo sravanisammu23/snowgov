@@ -1563,6 +1563,11 @@ def about():
         menu_title =None,
         options=["SNOWGOV"],
         icons = ["snow2"],
+	styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
+        "nav-link": {"font-family":"Sans serif","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
+             }
 
     )
     if des1 == "SNOWGOV":
@@ -1582,6 +1587,11 @@ def about():
         menu_title =None,
         options=["FAQ's"],
         icons =["bookmarks-fill"],
+	styles={
+        "container": {"padding": "0!important", "background-color": "#fafafa","font-family": "Poppins"},
+        "nav-link": {"font-family":"Sans serif","font-size": "18px","font-family": "Poppins", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
+        "nav-link-selected": {"background-color": "#6D7294","font-family": "Poppins"},
+             }
 
     )
     if faq == "FAQ's":
@@ -1606,6 +1616,18 @@ def Menu_navigator():
             options=["User","Database" ,"Role", "Monitor","About"],
             icons=["people-fill","database-fill", "person-lines-fill", "tv-fill","info-circle-fill"],
             menu_icon="menu-button-wide-fill",
+	styles={
+       
+        "nav-link": {
+		"font-family":"poppins !important",
+		"text-align": "left", 
+		"--hover-color": "#eee",
+	        "margin":"0px 0px 1rem",
+                "padding": "0px",
+                "font-size": "1rem",
+                "font-weight": 400,
+       
+      }
 
         )
     pages = {
@@ -1615,11 +1637,7 @@ def Menu_navigator():
         "Monitor" : monitor,
         "About"   : about
     }
-    styles={
-        "container": {"padding": "0!important", "background-color": "#fafafa"},
-        "nav-link": {"font-family":"","font-size": "18px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#0096FF"},
-      }
+   
     if choice == 'Database':
         current_page = "Database Management"
     elif choice == 'User':
