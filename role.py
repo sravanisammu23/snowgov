@@ -31,7 +31,7 @@ def get_custom_css():
 
 .stButton>button {
     background: linear-gradient(to right, #a02a41 0%,    #1D4077 100%);
-    font-family: Poppins;
+    font-family: Poppins !important;
     padding: 10px 30px;
     color: white;
     border-radius: 50px;
