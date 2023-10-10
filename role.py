@@ -1557,7 +1557,6 @@ def about():
     des1=option_menu(
         menu_title =None,
         options=["SNOWGOV"],
-        icons = ["snow2"],
 	styles={
 		"nav-link": {
 			"margin":"0px 0px 1rem",
