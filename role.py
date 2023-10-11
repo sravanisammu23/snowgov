@@ -991,11 +991,11 @@ def monitor3(tab_id):
 
 
     # Subject Area Filter
+    with col_proj:
 
-with col_proj:
-    
-    subject_areas = ['All'] + [result[0].strip() for result in results]
-    selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
+        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
+
+        selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
 
 
 
