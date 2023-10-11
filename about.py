@@ -771,7 +771,7 @@ def construct_project_query(environments):
         return f"""
             SELECT DISTINCT MAX(CASE WHEN tag_name = 'COST_CENTER' THEN tag_value END)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
-            WHERE split_part(object_name,'_',1) IN ({environments_str}) AND domain = 'WAREHOUSE'
+            WHERE split_part(object_name,'_',0) IN ({environments_str}) AND domain = 'WAREHOUSE'
             GROUP BY object_name;
         """
     else:
@@ -790,7 +790,7 @@ def construct_subject_query(environments, projects):
         return f"""
             SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
-            WHERE split_part(object_name,'_',1) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA'
+            WHERE split_part(object_name,'_',0) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA'
             AND object_name IN (
                 SELECT DISTINCT tr.object_name
                 FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES tr
@@ -801,7 +801,7 @@ def construct_subject_query(environments, projects):
         return f"""
             SELECT DISTINCT trim(tag_value)
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES
-            WHERE split_part(object_name,'_',1) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
+            WHERE split_part(object_name,'_',0) IN ({environments_str}) AND domain = 'WAREHOUSE' AND tag_name = 'SUBJECT_AREA';
         """
     elif projects:
         return f"""
@@ -830,7 +830,7 @@ def construct_query(environments, projects, subject_areas, start_date, end_date)
         return f"""
             SELECT warehouse_name, SUM(credits_used) as credits_used
             FROM "SNOWFLAKE"."ACCOUNT_USAGE".WAREHOUSE_METERING_HISTORY
-            WHERE split_part(warehouse_name, '_', 1) = '{environment}'
+            WHERE split_part(warehouse_name, '_', 0) = '{environment}'
             AND warehouse_name IN (
                 SELECT DISTINCT tr.object_name
                 FROM "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES tr
@@ -850,7 +850,7 @@ def construct_query(environments, projects, subject_areas, start_date, end_date)
         subject_areas_str = ', '.join(f"'{subj}'" for subj in subject_areas) if subject_areas else ''
         where_clauses = []
         if environments:
-            where_clauses.append(f"split_part(warehouse_name, '_', 1) IN ({environments_str})")
+            where_clauses.append(f"split_part(warehouse_name, '_', 0) IN ({environments_str})")
         if projects:
             where_clauses.append(f"warehouse_name IN (SELECT DISTINCT tr.object_name FROM \"SNOWFLAKE\".\"ACCOUNT_USAGE\".TAG_REFERENCES tr WHERE tr.tag_name = 'COST_CENTER' AND tr.tag_value IN ({projects_str}))")
         if subject_areas:
@@ -871,7 +871,7 @@ def fetch_all_warehouses(conn, environment, project, subject_area):
         FROM "SNOWFLAKE"."ACCOUNT_USAGE".WAREHOUSE_METERING_HISTORY wmh
         JOIN "SNOWFLAKE"."ACCOUNT_USAGE".TAG_REFERENCES tr
         ON wmh.warehouse_name = tr.object_name
-        WHERE split_part(wmh.warehouse_name, '_', 1) = '{environment}'
+        WHERE split_part(wmh.warehouse_name, '_', 0) = '{environment}'
         AND tr.tag_name = 'COST_CENTER' AND tr.tag_value = '{project}'
         AND tr.tag_name = 'SUBJECT_AREA' AND tr.tag_value = '{subject_area}'
     """
@@ -885,7 +885,7 @@ def construct_hourly_query(environment, start_date):
         SELECT to_char(start_time, 'HH24') as hour, sum(credits_used)
         FROM "SNOWFLAKE"."ACCOUNT_USAGE".WAREHOUSE_METERING_HISTORY
         WHERE start_time >= '{start_date.strftime('%Y-%m-%d %H:%M:%S')}'
-        AND split_part(warehouse_name, '_', 1) = '{environment}'
+        AND split_part(warehouse_name, '_', 0) = '{environment}'
         GROUP BY hour
         ORDER BY hour;
     """
@@ -1052,7 +1052,7 @@ def monitor3(tab_id):
             filter_condition = "1=1"  # Default condition when 'All' is selected
     else:
             selected_env_str = ', '.join([f"'{env[:4]}'" for env in selected_environments])
-            filter_condition = f"split_part(warehouse_name, '_', 1) IN ({selected_env_str})"
+            filter_condition = f"split_part(warehouse_name, '_', 0) IN ({selected_env_str})"
         # Construct the query based on the filter condition
     query = f"""
             SELECT
@@ -1131,7 +1131,7 @@ def monitor3(tab_id):
                 FROM
                     snowflake.account_usage.query_history
                 WHERE
-                    split_part(warehouse_name, '_', 1) IN ({selected_env_str})
+                    split_part(warehouse_name, '_', 0) IN ({selected_env_str})
                 GROUP BY
                     warehouse_name, query_type
                 ORDER BY
@@ -1177,7 +1177,7 @@ def monitor3(tab_id):
                 FROM
                     snowflake.account_usage.warehouse_metering_history
                 WHERE
-                    split_part(warehouse_name, '_', 1) IN ({selected_env_str})
+                    split_part(warehouse_name, '_', 0) IN ({selected_env_str})
                 GROUP BY
                     1
                 ORDER BY
