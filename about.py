@@ -960,7 +960,7 @@ def monitor3(tab_id):
     with col3:
         if selected_environments:
             projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
-            selected_projects = st.multiselect('SUBJECT AREA :', projects, default=['All'])
+            selected_projects = st.multiselect('BUSINESS UNIT :', projects, default=['All'])
 
     # Subject Area Filter
     with col4:
