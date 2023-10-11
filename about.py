@@ -14,6 +14,15 @@ from PIL import Image
 import base64
 import plotly.express as px
 image = Image.open('image_1.png')
+st.markdown("""
+    <style>
+        .main .block-container {
+	 
+	    margin-top:  -10rem;
+            margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
 
 
