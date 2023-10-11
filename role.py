@@ -993,13 +993,6 @@ def monitor3(tab_id):
     # Subject Area Filter
 
 with col_proj:
-    # Construct the query and fetch the results
-    constructed_query = construct_subject_query(selected_environments, selected_projects)
-    results = execute_query(conn, constructed_query)
-    
-    # Temporarily print the constructed SQL query and the results
-    st.write("Constructed SQL Query:", constructed_query)
-    st.write("Query Results:", results)
     
     subject_areas = ['All'] + [result[0].strip() for result in results]
     selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
