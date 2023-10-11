@@ -994,7 +994,7 @@ def monitor3(tab_id):
 
     with col_proj:
 
-         subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
+        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
 
         selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
 
