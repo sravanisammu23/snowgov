@@ -17,7 +17,7 @@ image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .main .block-container {
-	
+	 
 	    margin-top:  -10rem;
             margin-left: -18rem;  /* Adjust this value as needed to reduce the gap */
         }
@@ -47,6 +47,7 @@ st.markdown(custom_css, unsafe_allow_html=True)
 st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
+
 
 SNOWFLAKE_CONFIG = {
     "account": "fy50889.us-east4.gcp",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
@@ -1544,8 +1545,8 @@ def monitor2(tab_id):
 def about():
     st.markdown("""
     <style>
-        body img[src="SnowGov.png"] {
-            margin-left: 0px !important;
+        body img[src="your_logo.png"] {
+            margin-left: -10px !important;
         }
     </style>
 """, unsafe_allow_html=True)
