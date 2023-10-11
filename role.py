@@ -920,87 +920,58 @@ def display_bar_graph(data):
         st.plotly_chart(fig)
 
 def monitor3(tab_id):
+    if 'subject_area' is not  st.session_state:
+        st.session_state.selected_subject_areas=None
+
 
     conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
 
-    custom_css = get_custom_css()
+    selected_subject_areas = []
 
-    st.markdown(custom_css, unsafe_allow_html=True)
-
-
-
-    # Create columns for filters
-
-    col_date, col_env, col_bu, col_proj = st.columns([4.5, 4.5, 4.5, 4.5])
+    # Create columns
+    col1, col2, col3, col4 = st.columns([6, 6, 6, 10])
 
 
 
     # Date Range Filter
-
-    with col_date:
-
+    with col1:
         date_option = st.selectbox('Select Date Range', ['1 day', '7 days', '28 days', '1 year'])
-
         if date_option == '1 day':
-
             start_date = datetime.now() - timedelta(days=1)
-
         elif date_option == '7 days':
-
             start_date = datetime.now() - timedelta(days=7)
-
         elif date_option == '28 days':
-
             start_date = datetime.now() - timedelta(days=28)
-
         else:  # 1 year
-
             start_date = datetime.now() - timedelta(days=365)
-
         end_date = datetime.now()
 
-
-
     # Environment Filter
+    with col2:
 
-    with col_env:
         environments = ['All', 'DEV', 'PROD', 'STAGE', 'TEST']
         selected_environments = st.multiselect('ENVIRONMENT :', environments, default=['All'])
+        if not selected_environments:
+            st.warning("Please select at least one option for the Environment filter.")
+            return
 
-    # Check if an environment is selected
-    if not selected_environments:
-        st.warning("Please select at least one environment.")
-        return
-
-
-
-    # Business Unit Filter
-
-    with col_bu:
-
+    # Project Filter
+    with col3:
         if selected_environments:
-
             projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
-
-            selected_projects = st.multiselect('BUSINESS UNIT :', projects, default=['All'])
-
-        else:
-
-            selected_projects = ['All']
-
-
+            selected_projects = st.multiselect('SUBJECT AREA :', projects, default=['All'])
 
     # Subject Area Filter
-
-    with col_proj:
-
-        subject_areas = ['All'] + [result[0].strip() for result in execute_query(conn, construct_subject_query(selected_environments, selected_projects))]
-
-        selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
+    with col4:
+        if selected_environments and selected_projects:
+            subject_areas_query_result = execute_query(conn, construct_subject_query(selected_environments, selected_projects))
+            subject_areas = list(set(['All'] + [result[0].strip() for result in subject_areas_query_result if result[0] is not None and result[0].strip() != '']))
+            st.session_state.selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
 
 
 
     # Constructing Query based on Graph Option
+    selected_subject_areas=st.session_state.selected_subject_areas
 
     query_credits = construct_query(selected_environments, selected_projects, selected_subject_areas, start_date, end_date)
 
