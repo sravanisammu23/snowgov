@@ -13,7 +13,7 @@ from utils import charts,processing,gui
 from PIL import Image
 import base64
 import plotly.express as px
-image = Image.open('image_1.png')
+#image = Image.open('image_1.png')
 st.markdown("""
     <style>
         .main .block-container {
@@ -45,10 +45,9 @@ def get_custom_css():
 </style>"""
 custom_css = get_custom_css()
 st.markdown(custom_css, unsafe_allow_html=True)
-st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
+#st.sidebar.image(image, caption=None, width=None, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
 #snowflake_config = st.secrets["sf_usage_app"]
 #connect to snowflake function
-
 
 SNOWFLAKE_CONFIG = {
     "account": "fy50889.us-east4.gcp",#https://anblicksorg_aws.us-east-1.snowflakecomputing.com
@@ -921,18 +920,13 @@ def display_bar_graph(data):
         st.plotly_chart(fig)
 
 def monitor3(tab_id):
-    if 'subject_area' is not  st.session_state:
-        st.session_state.selected_subject_areas=None
-
+    if 'subject_area' not in st.session_state:
+        st.session_state.selected_subject_areas = []
 
     conn = snowflake.connector.connect(**SNOWFLAKE_CONFIG)
 
-    selected_subject_areas = []
-
     # Create columns
     col1, col2, col3, col4 = st.columns([6, 6, 6, 10])
-
-
 
     # Date Range Filter
     with col1:
@@ -949,7 +943,6 @@ def monitor3(tab_id):
 
     # Environment Filter
     with col2:
-
         environments = ['All', 'DEV', 'PROD', 'STAGE', 'TEST']
         selected_environments = st.multiselect('ENVIRONMENT :', environments, default=['All'])
         if not selected_environments:
@@ -958,18 +951,20 @@ def monitor3(tab_id):
 
     # Project Filter
     with col3:
-        if selected_environments:
-            projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
-            selected_projects = st.multiselect('BUSINESS UNIT :', projects, default=['All'])
+        projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
+        selected_projects = st.multiselect('BUSINESS UNIT :', projects, default=['All'])
+
+    # If no project is selected, default to all projects.
+    if not selected_projects:
+        selected_projects = ['All']
 
     # Subject Area Filter
     with col4:
-        if selected_environments and selected_projects:
-            subject_areas_query_result = execute_query(conn, construct_subject_query(selected_environments, selected_projects))
-            subject_areas = list(set(['All'] + [result[0].strip() for result in subject_areas_query_result if result[0] is not None and result[0].strip() != '']))
-            st.session_state.selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
-
-
+        subject_areas_query_result = execute_query(conn, construct_subject_query(selected_environments, selected_projects))
+        if subject_areas_query_result is None:  # Handle None case
+            subject_areas_query_result = []
+        subject_areas = list(set(['All'] + [result[0].strip() for result in subject_areas_query_result if result[0] is not None and result[0].strip() != '']))
+        st.session_state.selected_subject_areas = st.multiselect('PROJECT :', subject_areas, default=['All'])
 
     # Constructing Query based on Graph Option
     selected_subject_areas=st.session_state.selected_subject_areas
