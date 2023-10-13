@@ -194,7 +194,7 @@ def database_management():
             st.markdown("<p style='font-family: Poppins; color: black;'>Environment :</p>", unsafe_allow_html=True)
             environment = st.radio('', ['DEV', 'PROD', 'STAGE', 'TEST'])
 
-            st.markdown("<p style='font-family: Poppins; color: black;'>Business Unit :</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-family: Poppins; color: black;'>Cost Center :</p>", unsafe_allow_html=True)
             db_team_name = st.selectbox('', available_teams)
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Project :</p>", unsafe_allow_html=True)
@@ -218,7 +218,7 @@ def database_management():
             st.markdown("<p style='font-family: Poppins; color: black;'>Environment :</p>", unsafe_allow_html=True)
             schema_env = st.selectbox('', ['DEV', 'PROD', 'STAGE', 'TEST'])
 
-            st.markdown("<p style='font-family: Poppins; color: black;'>Business Unit :</p>", unsafe_allow_html=True)
+            st.markdown("<p style='font-family: Poppins; color: black;'>Cost Center:</p>", unsafe_allow_html=True)
             schema_team_name = st.selectbox('', available_teams)
 
             st.markdown("<p style='font-family: Poppins; color: black;'>Project :</p>", unsafe_allow_html=True)
@@ -952,7 +952,7 @@ def monitor3(tab_id):
     # Project Filter
     with col3:
         projects = ['All'] + [result[0].strip() for result in execute_query(conn, construct_project_query(selected_environments)) if result[0] is not None and result[0].strip() != '']
-        selected_projects = st.multiselect('BUSINESS UNIT :', projects, default=['All'])
+        selected_projects = st.multiselect('COST CENTER :', projects, default=['All'])
 
     # If no project is selected, default to all projects.
     if not selected_projects:
